@@ -1,0 +1,21 @@
+version: '3.7'
+services:
+  camunda-backend:
+    build: ./camunda-backend
+    depends_on:
+      camunda:
+        condition: service_healthy
+  camunda:
+    image: camunda/camunda-bpm-platform:run-latest
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./camunda-backend:/camunda/conf
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080", "-m", "10"]
+      interval: 15s
+      retries: 5
+  # mongo:
+  #   image: mongo
+  #   ports:
+  #     - "27017:27017"
