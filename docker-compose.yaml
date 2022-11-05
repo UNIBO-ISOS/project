@@ -1,11 +1,13 @@
 version: '3.7'
 services:
   camunda-backend:
+    container_name: camunda-backend
     build: ./camunda-backend
     depends_on:
       camunda:
         condition: service_healthy
   camunda:
+    container_name: camunda
     image: camunda/camunda-bpm-platform:run-latest
     ports:
       - "8080:8080"
