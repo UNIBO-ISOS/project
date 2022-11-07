@@ -8,16 +8,32 @@ services:
         condition: service_healthy
   camunda:
     container_name: camunda
-    image: camunda/camunda-bpm-platform:run-latest
+    image: 'camunda/camunda-bpm-platform:run-latest'
     ports:
-      - "8080:8080"
+      - '8080:8080'
     volumes:
-      - ./camunda-backend:/camunda/conf
+      - './camunda-backend:/camunda/conf'
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080", "-m", "10"]
+      test:
+        - CMD
+        - curl
+        - '-f'
+        - 'http://localhost:8080'
+        - '-m'
+        - '10'
       interval: 15s
       retries: 5
-  # mongo:
-  #   image: mongo
-  #   ports:
-  #     - "27017:27017"
+  mongo:
+    container_name: mongo
+    image: mongo
+    ports:
+      - '27017:27017'
+    volumes:
+      - './mongodb/data:/data/db'
+  mongo-seeder:
+    container_name: mongo-seeder
+    build: 
+      context: ./mongo-seeder
+      dockerfile: Dockerfile
+      args:
+        - DATABASE_URI=mongodb://mongo:27017/acme

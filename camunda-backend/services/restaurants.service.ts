@@ -1,41 +1,30 @@
 import { HandlerArgs, Variables } from "camunda-external-task-client-js";
+import { Types } from "mongoose";
+import { Calendar, Restaurant } from "../repository/restaurants.repo";
 
 export const RetreiveRestaurants = async ({ task, taskService }: HandlerArgs) => {
     // FIXME: retrieve restaurants from db
-    const restaurants = [
-        {
-            city: "Modena",
-            name: "Ristorante Pizzeria La Taverna",
-        },
-        {
-            city: "Modena",
-            name: "Ristorante Pizzeria La Taverna 2",
-        },
-        {
-            city: "Bologna",
-            name: "Ristorante 2",
-        },
-        {
-            city: "Bologna",
-            name: "Ristorante 3",
-        },
-        {
-            city: "Ferrara",
-            name: "Ristorante 4",
-        },
-        {
-            city: "Ferrara",
-            name: "Ristorante 5",
-        },
-    ];
+    const start = new Date()
+    start.setHours(0, 0, 0, 0)
 
-    console.log(task.variables.getAll())
-    const city = task.variables.get('city');
-    console.log("city:", city)
+    const end = new Date()
+    end.setHours(23, 59, 59, 99)
+
+    const cityId = task.variables.get('cityId');
+
+    const todayUnavailability = await Calendar.find({ date: { $gte: start.toISOString(), $lt: end.toISOString() } }, { id_restaurant: true })
+    let query: any = {
+        _id: { $nin: todayUnavailability.map((item) => { return item.id_restaurant }) }
+    }
+    query.city = new Types.ObjectId(cityId)
+
+    const restaurants = await Restaurant.find(query)
+        .populate('city')
+
 
     let variables = new Variables();
     variables.setAll(task.variables.getAll());
-    variables.set('restaurants', restaurants.filter(r => r.city === city));
+    variables.set('restaurants', restaurants);
 
     await taskService.complete(task, variables);
 }

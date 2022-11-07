@@ -1,8 +1,9 @@
 import { HandlerArgs, Variables } from "camunda-external-task-client-js";
+import { City } from "../repository/cities.repo";
 
 export const RetreiveCities = async ({ task, taskService }: HandlerArgs) => {
-    // FIXME: retrieve cities from database
-    const cities = ['Modena', 'Bologna', 'Ferrara']
+    const cities = (await City.find({}, { name: true }))
+
 
     let variables = new Variables();
     variables.set('cities', cities);
