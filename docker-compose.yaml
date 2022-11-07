@@ -6,6 +6,8 @@ services:
     depends_on:
       camunda:
         condition: service_healthy
+      mongo:
+        condition: service_started
   camunda:
     container_name: camunda
     image: 'camunda/camunda-bpm-platform:run-latest'
@@ -32,8 +34,15 @@ services:
       - './mongodb/data:/data/db'
   mongo-seeder:
     container_name: mongo-seeder
-    build: 
+    build:
       context: ./mongo-seeder
       dockerfile: Dockerfile
       args:
-        - DATABASE_URI=mongodb://mongo:27017/acme
+        - 'DATABASE_URI=mongodb://mongo:27017/acme'
+  courier-service:
+    container_name: courier-service
+    build: ./courier-service
+    volumes:
+      - './courier-service/db:/var/courier-service/db'
+    ports:
+      - '3000:3000'
