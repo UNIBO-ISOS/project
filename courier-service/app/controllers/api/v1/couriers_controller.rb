@@ -44,7 +44,7 @@ class Api::V1::CouriersController < ApplicationController
         @courier = Courier.find(params[:id])
         if @courier
             @courier.destroy
-            render json: message: 'Courier successfully deleted.', status: 200
+            render json: { message: 'Courier successfully deleted.' }, status: 200
         else
             render json: { error: 'Unable to delete Courier.' }, status: 400
         end
