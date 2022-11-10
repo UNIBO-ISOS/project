@@ -51,3 +51,8 @@ services:
     build: ./restaurant-service
     ports:
       - '5000:5000'
+  customer-server:
+    container_name: customer-server
+    build: ./customer-server
+    ports:
+      - '3001:3001'
