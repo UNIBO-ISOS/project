@@ -8,6 +8,7 @@ Rails.application.routes.draw do
                 end
             end
             get '/deliveries/whoaccepted', to: 'deliveries#accepted'
+            post '/deliveries/selectCourier', to: 'deliveries#selectCourier'
         end
     end
     

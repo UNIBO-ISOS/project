@@ -72,11 +72,13 @@ class Api::V1::DeliveriesController < ApplicationController
     end
 
     def selectCourier
-        #todo
-    end
-
-    def isSelected
-        #todo
+        @delivery = Delivery.find(params[:delivery_id])
+        if @delivery
+            @delivery.update_attribute(:status, "confirmed")
+            render json: { message: "Delivery successfully confirmed." }, status: 200
+        else
+            render json: { error: "Unable to confirm the delivery. It does not exist" }, status: 400
+        end
     end
 
     #region private
