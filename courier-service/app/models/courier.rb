@@ -1,3 +1,5 @@
-class Courier < ApplicationRecord
-    has_many :deliveries
+class Courier
+  include Mongoid::Document
+  include Mongoid::Timestamps
+  include Mongoid::Attributes::Dynamic
 end
