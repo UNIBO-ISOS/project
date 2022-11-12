@@ -56,3 +56,8 @@ services:
     build: ./customer-server
     ports:
       - '3001:3001'
+  gis-service:
+    container_name: gis-service
+    build: ./gis-service
+    ports:
+      - '7005:7005'
