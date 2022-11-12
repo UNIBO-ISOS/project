@@ -4,7 +4,7 @@
         "name": "Rubiera",
         "location": {
             "type": "Point",
-            "coordinates": [44.6530, 10.7806]
+            "coordinates": [10.7806, 44.6530]
         }
     },
     {
@@ -12,7 +12,7 @@
         "name": "Reggio nell'Emilia",
         "location": {
             "type": "Point",
-            "coordinates": [44.6990, 10.6297]
+            "coordinates": [10.6297, 44.6990]
         }
     },
     {
@@ -20,7 +20,7 @@
         "name": "Modena",
         "location": {
             "type": "Point",
-            "coordinates": [44.6471, 10.9252]
+            "coordinates": [10.9252, 44.6471]
         }
     }
 ]

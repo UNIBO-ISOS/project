@@ -5,7 +5,7 @@
         "user": { "$oid": "62fe600b321930aecba76d3b" },
         "location": {
             "type": "Point",
-            "coordinates": [44.641957, 10.948562]
+            "coordinates": [ 10.948562, 44.641957 ]
         }
     },
     {
@@ -14,7 +14,7 @@
         "user": { "$oid": "62fe6013321930aecba76d3d" },
         "location": {
             "type": "Point",
-            "coordinates": [44.700961, 10.634586]
+            "coordinates": [ 10.634586, 44.700961 ]
         }
     }
 ]
