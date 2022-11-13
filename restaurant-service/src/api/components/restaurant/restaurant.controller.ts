@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { StatusCodes, ReasonPhrases } from 'http-status-codes';
 import { Types } from 'mongoose';
+import { moveToken } from '../../util/util';
 import { Restaurant, Calendar } from './restaurant.model';
 
 const getAllRestaurants = async (req: Request, res: Response, next: any) => {
@@ -100,4 +101,39 @@ const getRestaurant = async (req: Request, res: Response, next: any) => {
     }
 }
 
-export { getAllRestaurants, updateRestaurants, notifyUnavailability, getRestaurant }
+const getRestaurantAvailability = async (req: Request, res: Response, next: any) => {
+    const restaurantId = req.params.restaurantId
+    const bk = req.query.bk
+    if(!restaurantId || !bk) {
+        return res.status(StatusCodes.BAD_REQUEST).json({ error: ReasonPhrases.BAD_REQUEST })
+    }
+    console.log(restaurantId)
+    const restaurant = await Restaurant.findById(restaurantId)
+    if(!restaurant) {
+        return res.status(StatusCodes.BAD_REQUEST).json({ error: ReasonPhrases.BAD_REQUEST })
+    }
+    const timestamp = Date.now()
+    const availability = timestamp % 2 == 0
+
+    console.log(`Restaurant: ${restaurant.name} Timetsamp: ${timestamp} Availability: ${availability}`)
+    
+    const message = availability ? process.env.MESSAGE_RESTAURANT_AVAILABLE! : process.env.MESSAGE_RESTAURANT_UNAVAILABLE!
+
+    //todo: aggiornare, body POST a seconda dei dati necessari ad acme
+    const body = { 
+        "messageName": message,
+        "businessKey": bk,
+        "processVariables": {
+            "restaurants": {
+                "value": availability,
+                "type": "Boolean"
+            }
+        }
+     }
+
+     await moveToken(body)
+
+    return res.status(StatusCodes.OK).json({ restaurant: restaurant.name, timestamp: timestamp, avilability: availability})
+}
+
+export { getAllRestaurants, updateRestaurants, notifyUnavailability, getRestaurant, getRestaurantAvailability }

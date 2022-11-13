@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
+import axios from 'axios'
 
 const checkDeadline = async (req: Request, res: Response, next: any) => {
     const deadLineToday = new Date()
@@ -44,4 +45,8 @@ const checkUnavailability = async (req: Request, res: Response, next: any) => {
     return next()
 }
 
-export { checkDeadline, checkUnavailability }
+const moveToken = async (body: any) => {
+    await axios.post(process.env.CAMUNDA_URL!, body)
+}
+
+export { checkDeadline, checkUnavailability, moveToken }

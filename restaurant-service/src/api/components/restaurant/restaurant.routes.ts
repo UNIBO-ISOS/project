@@ -1,5 +1,5 @@
 import express from 'express';
-import { getAllRestaurants, updateRestaurants, notifyUnavailability, getRestaurant } from './restaurant.controller';
+import { getAllRestaurants, updateRestaurants, notifyUnavailability, getRestaurant, getRestaurantAvailability } from './restaurant.controller';
 import { checkDeadline, checkUnavailability } from '../../util/util';
 
 const router = express.Router();
@@ -10,6 +10,7 @@ router.get('/:restaurantId', getRestaurant);
 router.post('/:restaurantId', checkDeadline, updateRestaurants);
 //notify unavailability
 router.post('/:restaurantId/notifyUnavailability', checkUnavailability, notifyUnavailability)
-// todo: API
+// get availability of restaurants
+router.get('/:restaurantId/availability', getRestaurantAvailability)
 
 export { router }
