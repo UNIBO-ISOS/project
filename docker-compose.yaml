@@ -63,3 +63,8 @@ services:
     build: ./gis-service
     ports:
       - '7005:7005'
+  soap-service:
+    container_name: soap-service
+    build: ./soap-service
+    ports:
+      - '6666:6666'
