@@ -6,12 +6,12 @@ import { Courier } from './courier.model';
 
 const getCouriers = async (req: Request, res: Response, next: any) => {
     try {
-        if(!req.query.lat || !req.query.lng || !req.query.bk) {
+        if (!req.query.lat || !req.query.lng || !req.query.bk) {
             return res.status(StatusCodes.BAD_REQUEST).json({ error: ReasonPhrases.BAD_REQUEST })
         }
         let courierPoint: any = {
             type: 'Point',
-            coordinates: [ parseFloat(req.query.lng.toString()), parseFloat(req.query.lat.toString()) ]
+            coordinates: [parseFloat(req.query.lng.toString()), parseFloat(req.query.lat.toString())]
         }
         const documents = await Courier.find({
             location: {
@@ -22,12 +22,12 @@ const getCouriers = async (req: Request, res: Response, next: any) => {
             }
         });
 
-        await moveTokenGetCouriers(documents, req.query.bk)
+        await moveTokenGetCouriers(documents.map((c: any) => c._id), req.query.bk)
 
-        return res.status(StatusCodes.OK).json({documents})
+        return res.status(StatusCodes.OK).json({ documents })
     } catch (err) {
         return next(err)
     }
 }
 
-export { getCouriers }
+export { getCouriers };

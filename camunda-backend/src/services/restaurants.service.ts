@@ -3,7 +3,6 @@ import { Types } from "mongoose";
 import { Calendar, Restaurant } from "../repository/restaurants.repo";
 
 export const RetreiveRestaurants = async ({ task, taskService }: HandlerArgs) => {
-    // FIXME: retrieve restaurants from db
     const start = new Date()
     start.setHours(0, 0, 0, 0)
 
@@ -34,5 +33,11 @@ export const ReturnRestaurants = async ({ task, taskService }: HandlerArgs) => {
     // TODO: send restaurants to endpoint
 
     // Complete the task
+    await taskService.complete(task, task.variables);
+}
+
+export const AskRestaurantAvailability = async ({ task, taskService }: HandlerArgs) => {
+    // TODO: invoke restaurant service to ask for availability
+
     await taskService.complete(task, task.variables);
 }

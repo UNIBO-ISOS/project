@@ -1,21 +1,22 @@
 import axios from 'axios'
-
 const moveTokenGetCouriers = async (documents: any, bk: any) => {
-    const body = { 
+    const body = {
         "messageName": process.env.MESSAGE_NAME!,
         "businessKey": bk,
         "processVariables": {
             "couriers": {
-                "value": documents,
+                "value": JSON.stringify(documents),
                 "type": "Json"
-            },
-            "couriersCount": {
-                "value": documents.length,
-                "type": "Integer"
             }
+            // },
+            // "couriersCount": {
+            //     "value": documents.length,
+            //     "type": "Integer"
+            // }
         }
-     }
-    //await axios.post(process.env.CAMUNDA_URL!, body)
+    }
+
+    await axios.post(process.env.CAMUNDA_URL!, body)
 }
 
 export { moveTokenGetCouriers }
