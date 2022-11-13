@@ -1,10 +1,32 @@
 import { GeoJsonTypes } from 'geojson';
 import { Schema, model, ObjectId, Date } from 'mongoose';
 
+interface ICity {
+    name: String,
+    location: {
+        type: GeoJsonTypes, coordinates: number[]
+    }
+}
+
+const citySchema = new Schema<ICity>({
+    name: { type: String, required: true },
+    location: {
+        type: {
+            type: String,
+            enum: ['Point'],
+            required: true
+        },
+        coordinates: {
+            type: [Number],
+            required: true
+        }
+    }
+})
+
 interface IRestaurant {
     name: String,
     city: ObjectId,
-    user: ObjectId,
+    //user: ObjectId,
     location: {
         type: GeoJsonTypes, coordinates: number[]
     },
@@ -39,8 +61,8 @@ interface IRestaurant {
 
 const restaurantSchema = new Schema<IRestaurant>({
     name: { type: String, required: true },
-    city: { type: Schema.Types.ObjectId, ref: 'city', required: true },
-    user: { type: Schema.Types.ObjectId, ref: 'user', required: true },
+    city: { type: Schema.Types.ObjectId, ref: 'cities', required: true },
+    //user: { type: Schema.Types.ObjectId, ref: 'user', required: true },
     location: {
         type: {
             type: String,
@@ -105,7 +127,8 @@ const closedRestaurantCalendar = new Schema<IclosedRestaurantCalendar>({
 
 closedRestaurantCalendar.index({ id_restaurant: 1, date: 1 }, { unique: true })
 
-const Restaurant = model<IRestaurant>('restaurant', restaurantSchema, 'restaurant');
+const City = model<ICity>('cities', citySchema, 'cities')
+const Restaurant = model<IRestaurant>('restaurants', restaurantSchema, 'restaurants')
 const Calendar = model<IclosedRestaurantCalendar>('calendar', closedRestaurantCalendar, 'calendar')
 
-export { Restaurant, Calendar }
+export { Restaurant, Calendar, City }
