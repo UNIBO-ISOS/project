@@ -4,6 +4,8 @@ Rails.application.routes.draw do
             resources :couriers do
                 
             end
+
+            get 'availability/:id', to: 'couriers#availability'
         end
     end
 #   get 'couriers/index'

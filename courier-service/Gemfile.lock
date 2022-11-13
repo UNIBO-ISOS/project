@@ -9,6 +9,13 @@ GIT
       mongo (>= 2.18.0, < 3.0.0)
       ruby2_keywords (~> 0.0.5)
 
+GIT
+  remote: https://github.com/tra/spawnling.git
+  revision: 71a3facfce9357fa199928d11bf38b3df22b35a9
+  branch: master
+  specs:
+    spawnling (2.1.6)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -229,6 +236,7 @@ DEPENDENCIES
   puma (~> 5.0)
   rails (~> 7.0.4)
   selenium-webdriver
+  spawnling!
   sprockets-rails
   stimulus-rails
   turbo-rails

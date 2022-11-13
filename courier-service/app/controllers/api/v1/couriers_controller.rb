@@ -16,13 +16,53 @@ class Api::V1::CouriersController < ApplicationController
     def availability
         @price_proposal = rand(10...42) 
 
-        render json: { }, stauts: 200
+        #render json: { }, stauts: 200
 
-        # todo: INVIARE UN HTTP POST DOPO IL RENDER, 
-        # todo: CONTENENTE I DATI PER SBLOCCARE IL TOKEN
+        @proposal_with_bk = {
+            messageName: "Message_rcvPrice",
+            businessKey: "default",
+            localCorrelationKeys: {
+                InputCourier: {
+                    value: params[:id],
+                    type: "String"
+                }
+            },
+            processVariables: {
+                price: {
+                    value: @price_proposal,
+                    type: "Double"
+                }
+            }
+        }
+
+        render status: 200
+
+        #puts @proposal_with_bk
+        send_data_to_unlock_token(@proposal_with_bk)
     end
 
     def confirm
         render status: 200
+    end
+
+    private 
+
+    def client_ip
+        request.ip
+    end
+
+    def send_data_to_unlock_token(message)
+        puts message
+        #render json: @message, status: 200
+
+        Spawnling.new do
+            uri = URI.parse("http://" + client_ip + '/')
+            
+            http = Net::HTTP.new(uri.host, uri.port)
+            request = Net::HTTP::Post.new(uri.request_uri)
+            request.body = message.to_json
+    
+            response = http.request(request)
+        end
     end
 end
