@@ -20,7 +20,7 @@ class Api::V1::CouriersController < ApplicationController
 
         @proposal_with_bk = {
             messageName: "Message_rcvPrice",
-            businessKey: "default",
+            businessKey: params[:bk],
             localCorrelationKeys: {
                 InputCourier: {
                     value: params[:id],
@@ -35,7 +35,7 @@ class Api::V1::CouriersController < ApplicationController
             }
         }
 
-        render status: 200
+        render json: {params: params},  status: 200
 
         #puts @proposal_with_bk
         send_data_to_unlock_token(@proposal_with_bk)
@@ -55,14 +55,12 @@ class Api::V1::CouriersController < ApplicationController
         puts message
         #render json: @message, status: 200
 
-        Spawnling.new do
-            uri = URI.parse("http://" + client_ip + '/')
-            
-            http = Net::HTTP.new(uri.host, uri.port)
-            request = Net::HTTP::Post.new(uri.request_uri)
-            request.body = message.to_json
-    
-            response = http.request(request)
-        end
+        response = HTTParty.post(
+            "http://camunda:8080/engine-rest/message",
+            body: message.to_json,
+            headers: {
+                "Content-Type" => "application/json"
+            }
+        )
     end
 end

@@ -23,8 +23,9 @@ class BankWrapper {
         return new Promise((resolve, reject) => {
             this.client.then(async (client) => {
                 const response = await client.loginAsync( args )
-                const body = response[0]
-                resolve(body.sid.$value)
+                resolve(response)
+                /*const body = response[0]
+                resolve(body.sid.$value)*/
             })
             .catch((err) => {
                 reject(err)
@@ -59,7 +60,6 @@ class BankWrapper {
         return new Promise((resolve, reject) => {
             this.client.then(async (client) => {
                 const response = await client.newTransactionAsync( args )
-                console.log(response)
                 resolve(response)
             })
             .catch((err) => {
@@ -75,12 +75,11 @@ class BankWrapper {
      * @returns a promise, if the request succeed a boolean 
      * (true if paid, false otherwise) otherwise the error
      */
-    verifyTransaction(args: any) {
+    verifyTransaction(args: any) : Promise<any> {
         return new Promise((resolve, reject) => {
             this.client.then(async (client) => {
                 const response = await client.verifyTransactionAsync(args)
-                console.log(response)
-                resolve(response[0].status.$value)
+                resolve(response)
             })
             .catch((err) => {
                 reject(err)
@@ -98,7 +97,6 @@ class BankWrapper {
         return new Promise((resolve, reject) => {
             this.client.then(async (client) => {
                 const response = await client.refundTransactionAsync( args )
-                console.log(response)
                 resolve(response)
             })
             .catch((err) => {

@@ -1,0 +1,409 @@
+{
+	"info": {
+		"_postman_id": "4cf94718-3cce-4ac5-ab72-770db2eba30f",
+		"name": "ACME",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "13754141"
+	},
+	"item": [
+		{
+			"name": "Camunda",
+			"item": [
+				{
+					"name": "start new process instance",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"businessKey\": \"{{businessKey}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/engine-rest/process-definition/key/{{processKey}}/start",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"engine-rest",
+								"process-definition",
+								"key",
+								"{{processKey}}",
+								"start"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Ask for cities",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"messageName\": \"Message_askCities\",\n    \"businessKey\": \"default\",\n    \"resultEnabled\" : true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/engine-rest/message/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"engine-rest",
+								"message",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Send city",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"messageName\": \"Message_rcvCity\",\n    \"businessKey\": \"default\",\n    \"resultEnabled\" : true,\n    \"processVariables\": {\n        \"cityId\": {\n            \"value\": \"62f6668ec28d1d9c5ccf326d\",\n            \"type\": \"String\"\n        }\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/engine-rest/message/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"engine-rest",
+								"message",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Send order",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"messageName\": \"Message_rcvOrder\",\n    \"businessKey\": \"default\",\n    \"resultEnabled\" : true,\n    \"processVariables\": {\n        \"restaurant\": {\n            \"value\": \"633ed0966600b5005661fdc6\",\n            \"type\": \"String\"\n        }\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/engine-rest/message/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"engine-rest",
+								"message",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Send couriers",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"messageName\": \"Message_rcvCouriers\",\n    \"businessKey\": \"default\",\n    \"resultEnabled\" : true,\n    \"processVariables\": {\n        \"couriers\": {\n            \"value\": \"[\\\"63145ea022ec57ca1ed91a64\\\", \\\"63145f3f6c45a4cb1b23fd25\\\"]\",\n            \"type\": \"Json\"\n        }\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/engine-rest/message/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"engine-rest",
+								"message",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Send price of courier",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"messageName\": \"Message_rcvPrice\",\n    \"businessKey\": \"{{businessKey}}\",\n    \"localCorrelationKeys\": {\n        \"InputCourier\": {\n            \"value\": \"63145f3f6c45a4cb1b23fd25\",\n            \"type\": \"String\"\n        }\n    },\n    \"processVariables\": {\n        \"price\": {\n            \"value\": 1.0,\n            \"type\": \"Double\"\n        }\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/engine-rest/message/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"engine-rest",
+								"message",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Customer",
+			"item": [
+				{
+					"name": "get cities",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:3001/cities",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"cities"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get cities Copy",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n    {\n        \"_id\": \"123\",\n        \"name\": \"Padova\"\n    },\n    {\n        \"_id\": \"1234\",\n        \"name\": \"Milano\"\n    }\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3001/cities",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"cities"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Courier",
+			"item": [
+				{
+					"name": "ask courier availability",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/v1/availability/63145f3f6c45a4cb1b23fd25",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"v1",
+								"availability",
+								"63145f3f6c45a4cb1b23fd25"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "GIS",
+			"item": [
+				{
+					"name": "get couriers in range",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:7005/gis/couriers/?lat=44.723853&lng=10.561290&bk=default",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "7005",
+							"path": [
+								"gis",
+								"couriers",
+								""
+							],
+							"query": [
+								{
+									"key": "lat",
+									"value": "44.723853"
+								},
+								{
+									"key": "lng",
+									"value": "10.561290"
+								},
+								{
+									"key": "bk",
+									"value": "default"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Restaurant",
+			"item": [
+				{
+					"name": "New Request",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/restaurants/633ed0966600b5005661fdc6/availability?bk=default",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"restaurants",
+								"633ed0966600b5005661fdc6",
+								"availability"
+							],
+							"query": [
+								{
+									"key": "bk",
+									"value": "default"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Request Copy",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/restaurants/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"restaurants",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "businessKey",
+			"value": "defualt",
+			"type": "string"
+		},
+		{
+			"key": "processKey",
+			"value": "Process_0eo6cql",
+			"type": "string"
+		}
+	]
+}

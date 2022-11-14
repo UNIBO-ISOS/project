@@ -7,18 +7,13 @@ const service = {
             login: (args: any) => {
                 return new Promise(async (resolve, reject) => {
                     console.log(`Received request to login with args ${args}`)
-                    const bank = new BankWrapper()
-                    const token = bank.login(args)
-                    //todo: verify token's fields
-                    const body = { 
-                        "messageName": 'message',
-                        "businessKey": args.bk,
-                        "processVariables": {}
+                    try {
+                        const bank = new BankWrapper()
+                        const response = await bank.login(args)
+                        resolve(response)
+                    } catch (err) {
+                        reject(err)
                     }
-                    await moveToken(body)
-                    resolve({
-                        token: token
-                    })
                 }).catch((err: any) => {
                     console.log(err)
                 })
@@ -26,18 +21,13 @@ const service = {
             logout: (args: any) => {
                 return new Promise(async (resolve, reject) => {
                     console.log(`Received request to logout with args ${args}`)
-                    const bank = new BankWrapper()
-                    const response = bank.logout(args)
-                    //todo: verify token's fields
-                    const body = { 
-                        "messageName": 'message',
-                        "businessKey": args.bk,
-                        "processVariables": {}
+                    try {
+                        const bank = new BankWrapper()
+                        const response = await bank.logout(args)
+                        resolve(response)
+                    } catch (err) {
+                        reject(err)
                     }
-                    await moveToken(body)
-                    resolve({
-                        response: response
-                    })
                 }).catch((err: any) => {
                     console.log(err)
                 })
@@ -45,18 +35,21 @@ const service = {
             newTransaction: (args: any) => {
                 return new Promise(async (resolve, reject) => {
                     console.log(`Received request to create a new transaction with args: ${args}`)
-                    const bank = new BankWrapper()
-                    const response = bank.newTransaction(args)
-                    //todo: verify token's fields
-                    const body = { 
-                        "messageName": 'message',
-                        "businessKey": args.bk,
-                        "processVariables": {}
+                    try {
+                        const token = args.bk
+                        delete args.bk
+                        const bank = new BankWrapper()
+                        const response = await bank.newTransaction(args)
+                        const body = { 
+                            "messageName": 'message',
+                            "businessKey": token,
+                            "processVariables": {}
+                        }
+                        await moveToken(body)
+                        resolve(response)
+                    } catch (err) {
+                        reject(err)
                     }
-                    await moveToken(body)
-                    resolve({
-                        response: response
-                    })
                 }).catch((err: any) => {
                     console.log(err)
                 })
@@ -64,18 +57,22 @@ const service = {
             verifyTransaction: ( args: any ) => {
                 return new Promise(async (resolve, reject) => {
                     console.log(`Received request to verify token with args ${args}`)
-                    const bank = new BankWrapper()
-                    const response = bank.verifyTransaction(args)
-                    //todo: verify token's fields
-                    const body = { 
-                        "messageName": 'message',
-                        "businessKey": args.bk,
-                        "processVariables": {}
+                    try {
+                        const token = args.bk
+                        delete args.bk
+                        const bank = new BankWrapper()
+                        const response = await bank.verifyTransaction(args)
+                        const verified = response[0].status.$value
+                        let body = { 
+                            "messageName": verified ? process.env.CAMUNDA_SUCCESSFUL_TOKEN_VERIFICATION! : process.env.CAMUNDA_UNSUCCESSFUL_TOKEN_VERIFICATION!,
+                            "businessKey": token,
+                            "processVariables": {}
+                        } 
+                        await moveToken(body)
+                        resolve(response)
+                    } catch (err) {
+                        reject(err)
                     }
-                    await moveToken(body)
-                    resolve({
-                        transactionConfermed: response
-                    })
                 }).catch((err: any) => {
                     console.log(err)
                 })
@@ -83,18 +80,13 @@ const service = {
             refundTransaction: ( args: any ) => {
                 return new Promise(async (resolve, reject) => {
                     console.log(`Received request to refund token with args ${args}`)
-                    const bank = new BankWrapper()
-                    const response = bank.refundTransaction(args)
-                    //todo: verify token's fields
-                    const body = { 
-                        "messageName": 'message',
-                        "businessKey": args.bk,
-                        "processVariables": {}
+                    try {
+                        const bank = new BankWrapper()
+                        const response = bank.refundTransaction(args)
+                        resolve(response)
+                    } catch(err) {
+                        reject(err)
                     }
-                    await moveToken(body)
-                    resolve({
-                        refund: response
-                    })
                 }).catch((err: any) => {
                     console.log(err)
                 })

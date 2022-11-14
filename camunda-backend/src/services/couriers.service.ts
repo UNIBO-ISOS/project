@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { HandlerArgs, Variables } from 'camunda-external-task-client-js';
 
 interface PriceProposal {
@@ -8,24 +9,23 @@ interface PriceProposal {
 export const SendCourierRequest = async ({ task, taskService }: HandlerArgs) => {
     const courierId = task.variables.get('courierId');
 
-    // TODO:Send request to courier service
-    // let localVariables = new Variables();
-    // localVariables.set("InputCourier", courierId)
-    // console.log("Local variable set.", courierId)
-    // console.log(localVariables.getAll())
-
-    /* Bisogna mandare bk e activity id. */
-    // console.log(`${taskService.}`)
-
-    // Complete the task
     await taskService.complete(task, task.variables)
+
+    try {
+        await axios.get("http://courier-service:3000/api/v1/availability/" + courierId, {
+            params: {
+                bk: task.businessKey
+            }
+        })
+    } catch (err) {
+        console.log(err);
+    }
 }
 
 export const UpdateList = async ({ task, taskService }: HandlerArgs) => {
     const price = task.variables.get('price');
     const courierId: string | undefined = task.variables.get('courierId');
 
-    // TODO: Update courier list on mongo
     const pvar = variablesFrom(task.variables)
     const list: any[] = pvar.get("auction")
     if (list == undefined) {
