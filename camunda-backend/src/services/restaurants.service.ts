@@ -38,7 +38,6 @@ export const ReturnRestaurants = async ({ task, taskService }: HandlerArgs) => {
 }
 
 export const AskRestaurantAvailability = async ({ task, taskService }: HandlerArgs) => {
-    // TODO: invoke restaurant service to ask for availability
     const restaurant = task.variables.get('restaurant');
 
     await taskService.complete(task, task.variables);
