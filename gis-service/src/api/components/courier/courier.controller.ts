@@ -13,6 +13,9 @@ const getCouriers = async (req: Request, res: Response, next: any) => {
             type: 'Point',
             coordinates: [parseFloat(req.query.lng.toString()), parseFloat(req.query.lat.toString())]
         }
+
+        await Courier.syncIndexes()
+
         const documents = await Courier.find({
             location: {
                 $near: {

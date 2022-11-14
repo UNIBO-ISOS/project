@@ -1,5 +1,5 @@
 import { GeoJsonTypes } from 'geojson';
-import { Schema, model, connect, ObjectId } from 'mongoose';
+import { model, ObjectId, Schema } from 'mongoose';
 
 interface ICourier {
     name: String,
@@ -16,7 +16,7 @@ const courierSchema = new Schema<ICourier>({
         type: {
             type: String,
             enum: ['Point'],
-            required: true
+            required: true,
         },
         coordinates: {
             type: [Number],
@@ -29,4 +29,4 @@ courierSchema.index({ 'location': '2dsphere' });
 
 const Courier = model<ICourier>('couriers', courierSchema, 'couriers');
 
-export { Courier }
+export { Courier };
