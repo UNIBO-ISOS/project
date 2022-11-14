@@ -26,7 +26,7 @@ gem "jbuilder"
 
 gem 'mongoid', git: 'https://github.com/mongodb/mongoid.git', branch: 'master'
 gem 'spawnling', git: 'https://github.com/tra/spawnling.git', branch: 'master'
-
+gem 'httparty'
 # Use Redis adapter to run Action Cable in production
 # gem "redis", "~> 4.0"
 
