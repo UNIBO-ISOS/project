@@ -5,7 +5,7 @@ export const AskCouriersInRange = async ({ task, taskService }: HandlerArgs) => 
 
     await taskService.complete(task, task.variables)
     console.log("Asking couriers in range completed after task complete");
-    axios.get("http://gis-service:7005/gis/couriers", {
+    await axios.get("http://gis-service:7005/gis/couriers", {
         params: {
             bk: task.businessKey,
             lat: 44.723853,
