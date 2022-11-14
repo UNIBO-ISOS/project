@@ -1,3 +1,4 @@
+import axios from "axios";
 import { HandlerArgs, Variables } from "camunda-external-task-client-js";
 import { Types } from "mongoose";
 import { Calendar, Restaurant } from "../repository/restaurants.repo";
@@ -38,6 +39,14 @@ export const ReturnRestaurants = async ({ task, taskService }: HandlerArgs) => {
 
 export const AskRestaurantAvailability = async ({ task, taskService }: HandlerArgs) => {
     // TODO: invoke restaurant service to ask for availability
+    const restaurant = task.variables.get('restaurant');
 
     await taskService.complete(task, task.variables);
+
+    await axios.get(`http://restaurant-service:5000/api/restaurants/${restaurant}/availability`, {
+        params: {
+            bk: task.businessKey
+        }
+    })
+
 }
