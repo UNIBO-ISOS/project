@@ -8,7 +8,7 @@ class BankWrapper {
     /**
     * path to the wsdl file, it specify the methods implemented by the bank
     */
-    private wsdl: string = process.env.WSDL_PATH!;
+    private wsdl: string = process.env.WSDL_PATH_BANK_SERVICE!;
     private client: Promise<Client>;
 
     constructor() {
