@@ -1,14 +1,17 @@
 import { Client, logger } from 'camunda-external-task-client-js';
 
 import * as dotenv from 'dotenv';
+
+dotenv.config();
+
 import * as mongoose from 'mongoose';
+import { verifyToken } from './services/bank.service';
 import { RetreiveCities, ReturnCities } from './services/cities.service';
 import { SelectCourier, SendCourierRequest, UpdateList } from './services/couriers.service';
 import { AskCouriersInRange } from './services/gis.service';
 import { CreateNewOrder } from './services/order.service';
 import { AskRestaurantAvailability, RetreiveRestaurants, ReturnRestaurants } from './services/restaurants.service';
 
-dotenv.config();
 // configuration for the Client:
 //  - 'baseUrl': url to the Process Engine
 //  - 'logger': utility to automatically log important events
@@ -37,3 +40,6 @@ client.subscribe('create-order', CreateNewOrder)
 
 // GIS topics
 client.subscribe('gis-askCouriers', AskCouriersInRange)
+
+// verify token
+client.subscribe('verifyToken', verifyToken)
