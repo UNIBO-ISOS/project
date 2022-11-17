@@ -1,4 +1,4 @@
-import { BankWrapper } from "../bankWrapper/wrapper"
+import { myBank } from "../bankWrapper/wrapper"
 import { moveToken } from "../util/util"
 
 const service = {
@@ -8,9 +8,10 @@ const service = {
                 return new Promise(async (resolve, reject) => {
                     console.log(`Received request to login with args ${args}`)
                     try {
-                        const bank = new BankWrapper()
-                        const response = await bank.login(args)
-                        resolve(response)
+                        resolve({})
+                        //const bank = new BankWrapper()
+                        //const response = await bank.login(args)
+                        //resolve(response)
                     } catch (err) {
                         reject(err)
                     }
@@ -22,9 +23,10 @@ const service = {
                 return new Promise(async (resolve, reject) => {
                     console.log(`Received request to logout with args ${args}`)
                     try {
-                        const bank = new BankWrapper()
-                        const response = await bank.logout(args)
-                        resolve(response)
+                        resolve({})
+                        //const bank = new BankWrapper()
+                        //const response = await myBank.logout(args)
+                        //resolve(response)
                     } catch (err) {
                         reject(err)
                     }
@@ -38,8 +40,8 @@ const service = {
                     try {
                         const token = args.bk
                         delete args.bk
-                        const bank = new BankWrapper()
-                        const response = await bank.newTransaction(args)
+                        //const bank = new BankWrapper()
+                        const response = await myBank.newTransaction(args)
                         const body = { 
                             "messageName": 'message',
                             "businessKey": token,
@@ -60,8 +62,9 @@ const service = {
                     try {
                         const token = args.bk
                         delete args.bk
-                        const bank = new BankWrapper()
-                        const response = await bank.verifyTransaction(args)
+                        //const bank = new BankWrapper()
+                        const response = await myBank.verifyTransaction(args)
+                        console.log(args.to_user)
                         const verified = response[0].status.$value
                         let body = { 
                             "messageName": verified ? process.env.CAMUNDA_SUCCESSFUL_TOKEN_VERIFICATION! : process.env.CAMUNDA_UNSUCCESSFUL_TOKEN_VERIFICATION!,
@@ -81,8 +84,8 @@ const service = {
                 return new Promise(async (resolve, reject) => {
                     console.log(`Received request to refund token with args ${args}`)
                     try {
-                        const bank = new BankWrapper()
-                        const response = bank.refundTransaction(args)
+                        //const bank = new BankWrapper()
+                        const response = myBank.refundTransaction(args)
                         resolve(response)
                     } catch(err) {
                         reject(err)

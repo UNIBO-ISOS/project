@@ -107,7 +107,7 @@
   </wsdl:binding>
   <wsdl:service name="BankServiceService">
     <wsdl:port name="BankServiceServicePort" binding="tns:BankServiceSOAPBinding">
-      <soap:address location="http://soap-service:6666"/>
+      <soap:address location="http://soap-service:6666/wsdl"/>
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>

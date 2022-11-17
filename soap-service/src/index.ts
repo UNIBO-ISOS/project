@@ -1,11 +1,12 @@
 import * as soap from 'soap'
 import dotenv from 'dotenv'
-import fs from 'fs'
-import http from 'http'
-import { service } from './serviceSOAP/service';
 
 // load environment
 dotenv.config();
+
+import fs from 'fs'
+import http from 'http'
+import { service } from './serviceSOAP/service';
 
 const wsdl = fs.readFileSync(process.env.WSDL_PATH!, 'utf-8')
 

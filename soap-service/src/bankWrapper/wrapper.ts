@@ -11,21 +11,24 @@ class BankWrapper {
     private wsdl: string = process.env.WSDL_PATH_BANK_SERVICE!;
     private client: Promise<Client>;
 
+    private sid: Promise<string>;
+
     constructor() {
         this.client = createClientAsync(this.wsdl)
+        this.sid = this.login()
     }
 
     /**
      * 
      * @returns when the promise is completed it returns the value of the session
      */
-    login(args: any) : Promise<string>{
+    private login() : Promise<string>{
         return new Promise((resolve, reject) => {
             this.client.then(async (client) => {
-                const response = await client.loginAsync( args )
-                resolve(response)
-                /*const body = response[0]
-                resolve(body.sid.$value)*/
+                const response = await client.loginAsync( { username: process.env.BANK_USERNAME!, password: process.env.BANK_PASSWORD! } )
+                //resolve(response)
+                const body = response[0]
+                resolve(body.sid.$value)
             })
             .catch((err) => {
                 reject(err)
@@ -38,6 +41,8 @@ class BankWrapper {
      logout(args: any) : Promise<string>{
         return new Promise((resolve, reject) => {
             this.client.then(async (client) => {
+                const sid = await this.sid
+                args.sid = sid
                 const response = await client.logoutAsync( args )
                 resolve(response)
             })
@@ -59,6 +64,8 @@ class BankWrapper {
      newTransaction(args: any) {
         return new Promise((resolve, reject) => {
             this.client.then(async (client) => {
+                const sid = await this.sid
+                args.sid = sid
                 const response = await client.newTransactionAsync( args )
                 resolve(response)
             })
@@ -78,6 +85,8 @@ class BankWrapper {
     verifyTransaction(args: any) : Promise<any> {
         return new Promise((resolve, reject) => {
             this.client.then(async (client) => {
+                const sid = await this.sid
+                args.sid = sid
                 const response = await client.verifyTransactionAsync(args)
                 resolve(response)
             })
@@ -96,6 +105,8 @@ class BankWrapper {
     refundTransaction(args: any) {
         return new Promise((resolve, reject) => {
             this.client.then(async (client) => {
+                const sid = await this.sid
+                args.sid = sid
                 const response = await client.refundTransactionAsync( args )
                 resolve(response)
             })
@@ -107,4 +118,12 @@ class BankWrapper {
 
 }
 
-export { BankWrapper }
+let myBank: BankWrapper;
+
+try {
+    myBank = new BankWrapper()
+} catch(err) {
+    throw err;
+}
+
+export { myBank }
