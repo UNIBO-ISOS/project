@@ -79,4 +79,4 @@ services:
     ports: 
       - "8765:8765"
     volumes:
-      -   './bank-service-sqlite:/acmeat/bank-service/src/acmeatdb/'
+      -   './bank-service-sqlite/:/acmeat/bank-service/src/acmeatdb/'
