@@ -64,7 +64,6 @@ const service = {
                         delete args.bk
                         //const bank = new BankWrapper()
                         const response = await myBank.verifyTransaction(args)
-                        console.log(args.to_user)
                         const verified = response[0].status.$value
                         let body = { 
                             "messageName": verified ? process.env.CAMUNDA_SUCCESSFUL_TOKEN_VERIFICATION! : process.env.CAMUNDA_UNSUCCESSFUL_TOKEN_VERIFICATION!,
