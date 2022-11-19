@@ -15,19 +15,11 @@ inputPort BankService {
 }
 
 cset {
-    sid: Message.sid
-}
-
-cset {
-    sid: NewTransactionRequest.sid
-}
-
-cset {
-    sid: RefundTransactionRequest.sid
-}
-
-cset {
-    sid: VerifyTransactionRequest.sid
+    sid: 
+        Message.sid
+        NewTransactionRequest.sid
+        RefundTransactionRequest.sid
+        VerifyTransactionRequest.sid
 }
 
 execution { concurrent }
@@ -320,15 +312,16 @@ main{
                         sqlVerifyResponse.row.to_user == verifyTransaction_request.to_user &&
                         sqlVerifyResponse.row.amount == verifyTransaction_request.amount
                         ) {
-                    if(sqlVerifyResponse.status == "created"){
+                    println@Console(sqlVerifyResponse.row.status)();
+                    if(sqlVerifyResponse.row.status == "created" || sqlVerifyResponse.row.status == "verified"){
                         update@Database(
                         "UPDATE Transactions SET status=:status WHERE token=:token" {
                             .token = verifyTransaction_request.token,
                             .status = "verified"
                         }
-                    )(dbresponse.status)
+                        )(dbresponse.status)
                     
-                    verifyTransaction_response.status = true
+                        verifyTransaction_response.status = true
                     }
                 }
 
@@ -340,113 +333,6 @@ main{
 
             }
         } ]
-
-
-
-        /*  DB QUERIES
-          #################
-            -------------
-          #################
-        */
-
-    /*
-
-        [ retrieveAllTransactions(response)(response) {
-            query@Database(
-                "SELECT * FROM Transactions"
-            )(sqlResponse);
-            response.values -> sqlResponse.row
-        } ]
-
-        [ retrieveAllUsers(request)(response) {
-            query@Database(
-                "SELECT * FROM Users"
-            )(sqlResponse);
-            response.values -> sqlResponse.row
-        } ]
-        
-        [ createTransaction(request)(response) {
-            update@Database(
-                "INSERT INTO Transactions (token, amount, from_user, to_user) VALUES (:token, :amount, :from_user, :to_user)" {
-                    .token = uuid,
-                    .amount = request.amount,
-                    .from_user = request.from_user,
-                    .to_user = request.to_user,
-                }
-            )(response.status)
-        } ]
-
-        [ createUser(request)(response) {
-            update@Database(
-                "INSERT INTO Users (username, balance) VALUES (:username, :balance)" {
-                    .username = request.username,
-                    .balance = request.balance
-                }
-            )(response.status)
-        } ]
-
-        [ retrieveTransactionByID(request)(response) {
-            query@Database(
-                "SELECT * FROM Transactions WHERE id=:id" {
-                    .id = request.id
-                }
-            )(sqlResponse);
-            if (#sqlResponse.row == 1) {
-                response -> sqlResponse.row[0]
-            }
-        } ]  
-
-        [ retrieveTransactionByToken(request)(response) {
-            query@Database(
-                "SELECT * FROM Transactions WHERE token=:token" {
-                    .token = request.token
-                }
-            )(sqlResponse);
-            if (#sqlResponse.row == 1) {
-                response -> sqlResponse.row[0]
-            }
-        } ]  
-
-        [ retrieveUserByID(request)(response) {
-            query@Database(
-                "SELECT * FROM Users WHERE id=:id" {
-                    .id = request.id
-                }
-            )(sqlResponse);
-            if (#sqlResponse.row == 1) {
-                response -> sqlResponse.row[0]
-            }
-        } ]   
-
-        [ retrieveUserByUsername(request)(response) {
-            query@Database(
-                "SELECT * FROM Users WHERE username=:username" {
-                    .username = request.username
-                }
-            )(sqlResponse);
-            if (#sqlResponse.row == 1) {
-                response -> sqlResponse.row[0]
-            }
-        } ]   
-
-        [ update(request)(response) {
-            update@Database(
-                "UPDATE Transactions SET status=:status WHERE id=:id" {
-                    .status = false,
-                    .id = request.id
-                }
-            )(response.status)
-        } ]
-
-        [ delete(request)(response) {
-            update@Database(
-                "DELETE FROM Transactions WHERE id=:id" {
-                    .id = request.id
-                }
-            )(response.status)
-        } ]
-
-    */
 
         [ logout( request )] {
             println@Console("User " + username + " logged out.")();
