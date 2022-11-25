@@ -80,3 +80,8 @@ services:
       - "8765:8765"
     volumes:
       -   './bank-service-sqlite/:/acmeat/bank-service/src/acmeatdb/'
+  bank-frontend:
+    container_name: bank-frontend
+    build: ./bank-frontend
+    ports:
+      - "9090:9999"

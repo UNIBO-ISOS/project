@@ -8,10 +8,10 @@ const service = {
                 return new Promise(async (resolve, reject) => {
                     console.log(`Received request to login with args ${args}`)
                     try {
-                        resolve({})
+                        //resolve(args)
                         //const bank = new BankWrapper()
-                        //const response = await bank.login(args)
-                        //resolve(response)
+                        const response = await myBank.loginClient(args)
+                        resolve(response)
                     } catch (err) {
                         reject(err)
                     }
@@ -23,7 +23,7 @@ const service = {
                 return new Promise(async (resolve, reject) => {
                     console.log(`Received request to logout with args ${args}`)
                     try {
-                        resolve({})
+                        resolve(args)
                         //const bank = new BankWrapper()
                         //const response = await myBank.logout(args)
                         //resolve(response)

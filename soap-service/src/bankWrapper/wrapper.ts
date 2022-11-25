@@ -37,6 +37,17 @@ class BankWrapper {
         })
     }
 
+    loginClient(args: any) : Promise<string> {
+        return new Promise((resolve, reject) => {
+            this.client.then(async (client) => {
+                const response = await client.loginAsync( args )
+                resolve(response)
+            }).catch((err) => {
+                reject(err)
+            })
+        })
+    }
+
     //todo: test function
      logout(args: any) : Promise<string>{
         return new Promise((resolve, reject) => {
