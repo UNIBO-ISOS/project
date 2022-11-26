@@ -1,4 +1,4 @@
-package main
+package utils
 
 import (
 	"bytes"
@@ -59,9 +59,16 @@ func StartNewProcess(bkey string) (int, error) {
 	return res.StatusCode, err
 }
 
-func guardAgainstError(err error, code int, c *gin.Context) {
+func GuardAgainstBadRequest(err error, code int, ctx *gin.Context) {
 	if err != nil || code >= 400 {
-		c.JSON(code, gin.H{"error": err.Error()})
+		ctx.JSON(code, gin.H{"error": err.Error()})
+		panic(err)
+	}
+}
+
+func GuradAgainstError(err error, ctx *gin.Context) {
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		panic(err)
 	}
 }
