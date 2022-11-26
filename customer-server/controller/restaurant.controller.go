@@ -3,6 +3,7 @@ package controller
 import (
 	"customer-server/events"
 	"customer-server/model"
+	"customer-server/utils"
 	"net/http"
 	"sync"
 
@@ -23,6 +24,18 @@ func (rc RestaurantController) GetRestaurants(ctx *gin.Context) {
 		})
 		return
 	}
+
+	// Take city parameter from the request
+	cityId := ctx.Query("cityId")
+	if cityId == "" {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error": "city is required",
+		})
+		return
+	}
+
+	pv := utils.ProcessVariable{"cityId": {"value": cityId, "type": "String"}}
+	utils.UnlockMessageWithVariables("Message_rcvCity", bk, pv)
 
 	wg.Add(1)
 	go ee.Once(events.RestaurantEvent(bk), func(data []Restaurant) {
@@ -48,7 +61,7 @@ func (rc RestaurantController) PostRestaurants(ctx *gin.Context) {
 		return
 	}
 
-	ee.Emit(events.RestaurantEvent(bk))
+	ee.Emit(events.RestaurantEvent(bk), restaurants)
 
 	ctx.JSON(http.StatusOK, gin.H{})
 }

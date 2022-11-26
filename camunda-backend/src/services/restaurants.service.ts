@@ -31,7 +31,9 @@ export const RetreiveRestaurants = async ({ task, taskService }: HandlerArgs) =>
 
 export const ReturnRestaurants = async ({ task, taskService }: HandlerArgs) => {
     const restaurants = task.variables.get('restaurants');
-    // TODO: send restaurants to endpoint
+
+    const bk = task.businessKey;
+    await axios.post('http://customer-server:3001/restaurants', restaurants, { headers: { businessKey: bk } });
 
     // Complete the task
     await taskService.complete(task, task.variables);

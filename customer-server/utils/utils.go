@@ -3,6 +3,8 @@ package utils
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
+	"io/ioutil"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -43,8 +45,18 @@ func UnlockMessage(messageName, bkey string) (int, error) {
 	return res.StatusCode, err
 }
 
-func UnlockMessageWithVariables(messageName, bkey string) {
+func UnlockMessageWithVariables(messageName, bkey string, processVariables ProcessVariable) (int, error) {
+	msg := ReceiveMessage{
+		MessageName:      messageName,
+		BusinessKey:      bkey,
+		ResultEnabled:    true,
+		ProcessVariables: processVariables,
+	}
 
+	body, _ := json.Marshal(msg)
+	res, err := http.Post("http://camunda:8080/engine-rest/message/", "application/json", bytes.NewBuffer(body))
+
+	return res.StatusCode, err
 }
 
 func StartNewProcess(bkey string) (int, error) {
@@ -71,4 +83,9 @@ func GuradAgainstError(err error, ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		panic(err)
 	}
+}
+
+func PrintBody(ctx *gin.Context) {
+	body, _ := ioutil.ReadAll(ctx.Request.Body)
+	fmt.Println(string(body))
 }
