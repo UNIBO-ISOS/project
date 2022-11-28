@@ -12,6 +12,8 @@
      * - items: [name, category]
      */
     export let menu;
+
+    export let handleAddToCart;
 </script>
 
 <div class="card-container">
@@ -28,8 +30,8 @@
             </List>
             Price: ${menu.price}
         </Content>
-        <Button>
-            <Label>Add to cart</Label>
+        <Button on:click={() => handleAddToCart()}>
+            <Label>Aggiungi al carrello</Label>
         </Button>
     </Card>
 </div>

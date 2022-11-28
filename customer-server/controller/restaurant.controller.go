@@ -17,7 +17,7 @@ func (rc RestaurantController) GetRestaurants(ctx *gin.Context) {
 	var wg sync.WaitGroup
 	var restaurants []Restaurant
 
-	bk := ctx.Request.Header.Get("businessKey")
+	bk := ctx.Query("businessKey")
 	if bk == "" {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"error": "business key is required",

@@ -3,28 +3,18 @@
     import axios from "axios";
 
     const loadOptions = async () => {
-        // const response = await axios.get("http://localhost:3001/cities")
-        // response.json()
-        // const response = await axios.get("http://customer-server:3001/cities");
-        const response = await axios.get("http://localhost:3001/cities/");
-        // const response = await axios.get("https://customer-server:3001/cities");
+        const response = await axios.get(
+            "http://localhost:3001/cities/",
+        );
+        const { businessKey, cities } = response.data;
+        localStorage.setItem("businessKey", businessKey);
 
-        // console.log(response.json());
-
-        return response.data;
+        return cities;
     };
 
     const options = loadOptions();
-    // $: console.log(options)
-
-    // const options = [
-    //     { id: "mil01", name: "Milano" },
-    //     { id: "rom01", name: "Roma" },
-    // ];
 
     export let city;
-
-    // console.log(options)
 </script>
 
 <div style="margin-top: 1rem;">

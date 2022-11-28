@@ -36,7 +36,10 @@ func (_ *CityController) GetCities(ctx *gin.Context) {
 	wg.Add(1)
 	go ee.Once(events.CityEvent(bk), func(c []City) {
 		cities = c
-		ctx.JSON(http.StatusOK, cities)
+		ctx.JSON(http.StatusOK, gin.H{
+			"cities":      cities,
+			"businessKey": bk,
+		})
 		wg.Done()
 	})
 	wg.Wait()

@@ -5,7 +5,6 @@
     import Card, { Actions, Content } from "@smui/card";
     /* 
     - name: string
-    - hours: Array
     */
     export let restaurant;
     export let onClick;

@@ -1,58 +1,48 @@
 <script>
-  import MenuCard from "./lib/MenuCard.svelte";
-  import RestaurantCard from "./lib/RestaurantCard.svelte";
+  import CartSummary from "./lib/CartSummary.svelte";
   import SelectCity from "./lib/SelectCity.svelte";
+  import SelectMenu from "./lib/SelectMenu.svelte";
   import SelectRestaurant from "./lib/SelectRestaurant.svelte";
 
   // Control the flow of the app
   let city;
   $: isCitySelected = city != undefined;
 
-  const sampleRestaurant = { name: "Restaurant Name", hours: [] };
-
-  const restaurants = Array(5).fill(sampleRestaurant);
-
-  const sampleMenu = {
-    name: "Menu Name",
-    desc: "Menu Description",
-    price: 10,
-    items: [
-      { name: "Item 1", category: "Category 1" },
-      { name: "Item 2", category: "Category 1" },
-    ],
-  };
-
   let restaurant;
   $: isRestaurantSelected = restaurant != undefined;
 
-  let menu;
+  let cart;
+  $: isCartSelected = cart != undefined && cart.length > 0;
+  $: console.log(cart);
+
+  // When changing restaurant, reset the cart
+  // $: restaurant, cart = []
 </script>
 
 <main>
   <div class="container">
     <h1>Benvenuto su ACMEat</h1>
+    <div style="display: flex;">
+      <div style="flex: 3">
+        {#if !isCitySelected}
+          <SelectCity bind:city />
+        {/if}
 
-    {#if !isCitySelected}
-      <SelectCity bind:city />
-    {/if}
+        {#if isCitySelected}
+          <SelectRestaurant bind:restaurant {city} />
+        {/if}
 
-    {#if isCitySelected}
-      <SelectRestaurant {restaurant} {city} />
-      <div class="restaurant-carousel">
-        {#each restaurants as r}
-          <RestaurantCard
-            restaurant={r}
-            onClick={() => {
-              restaurant = r;
-            }}
-          />
-        {/each}
+        {#if isRestaurantSelected}
+          <SelectMenu bind:cart {restaurant} />
+        {/if}
       </div>
-    {/if}
 
-    {#if isRestaurantSelected}
-      <MenuCard menu={sampleMenu} />
-    {/if}
+      {#if isCartSelected}
+        <div style="flex: 1">
+          <CartSummary bind:cart />
+        </div>
+      {/if}
+    </div>
   </div>
 </main>
 
@@ -63,13 +53,6 @@
     background-color: white;
     padding: 2.5vh 2.5vw;
     min-height: 95vh;
-  }
-
-  .restaurant-carousel {
-    display: flex;
-    flex-direction: row;
-    gap: 1vw;
-    flex-wrap: wrap;
   }
 
   h1 {
