@@ -47,7 +47,7 @@ const service = {
                             "businessKey": token,
                             "processVariables": {}
                         }
-                        await moveToken(body)
+                        //await moveToken(body)
                         resolve(response)
                     } catch (err) {
                         reject(err)

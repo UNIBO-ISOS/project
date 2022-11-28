@@ -75,8 +75,6 @@ class BankWrapper {
      newTransaction(args: any) {
         return new Promise((resolve, reject) => {
             this.client.then(async (client) => {
-                const sid = await this.sid
-                args.sid = sid
                 const response = await client.newTransactionAsync( args )
                 resolve(response)
             })
