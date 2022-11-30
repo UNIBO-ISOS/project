@@ -10,7 +10,7 @@ import { RetreiveCities, ReturnCities } from './services/cities.service';
 import { SelectCourier, SendCourierRequest, UpdateList } from './services/couriers.service';
 import { AskCouriersInRange } from './services/gis.service';
 import { CreateNewOrder } from './services/order.service';
-import { AskRestaurantAvailability, RetreiveRestaurants, ReturnRestaurants } from './services/restaurants.service';
+import { AskRestaurantAvailability, RetreiveRestaurants, ReturnRestaurants, SendRestaurantNotUpdated, SendRestaurantUpdated, UpdateRestaurantInfo, VerifyUpdateConditions } from './services/restaurants.service';
 
 // configuration for the Client:
 //  - 'baseUrl': url to the Process Engine
@@ -29,6 +29,11 @@ client.subscribe('return-cities', ReturnCities)
 client.subscribe('retrieve-restaurants', RetreiveRestaurants)
 client.subscribe('return-restaurants', ReturnRestaurants)
 client.subscribe('restaurant-askAvailability', AskRestaurantAvailability)
+
+client.subscribe('verify-update-conditions', VerifyUpdateConditions)
+client.subscribe('update-restaurant', UpdateRestaurantInfo)
+client.subscribe('unfeasable-restaurant-update', SendRestaurantNotUpdated)
+client.subscribe('feasable-restaurant-update', SendRestaurantUpdated)
 
 // Couriers topics
 client.subscribe('courier-askAvailiability', SendCourierRequest)

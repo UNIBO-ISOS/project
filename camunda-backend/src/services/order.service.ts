@@ -9,6 +9,17 @@ export const CreateNewOrder = async ({ task, taskService }: HandlerArgs) => {
     const pvar = variablesFrom(task.variables)
     pvar.set("orderId", _id)
 
-
     await taskService.complete(task, pvar)
+}
+
+export const NotifyOrderCreated = async ({ task, taskService }: HandlerArgs) => {
+    // TODO: Notify order created
+
+    await taskService.complete(task, task.variables)
+}
+
+export const NotifyOrderNotAvailable = async ({ task, taskService }: HandlerArgs) => {
+    // TODO: notify order not available
+
+    await taskService.complete(task)
 }

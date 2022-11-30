@@ -1,6 +1,6 @@
+import axios from 'axios';
 import { Request, Response } from 'express';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
-import axios from 'axios'
 
 const checkDeadline = async (req: Request, res: Response, next: any) => {
     const deadLineToday = new Date()
@@ -10,8 +10,8 @@ const checkDeadline = async (req: Request, res: Response, next: any) => {
     const nowMillis = Date.now()
 
     // check if the menù of the restaurants is updated before the 10:00am
-    if(nowMillis > deadlineMillis) { 
-        return res.status(StatusCodes.PRECONDITION_FAILED).json({ error: ReasonPhrases.PRECONDITION_FAILED})
+    if (nowMillis > deadlineMillis) {
+        return res.status(StatusCodes.PRECONDITION_FAILED).json({ error: ReasonPhrases.PRECONDITION_FAILED })
     }
 
     next()
@@ -25,11 +25,11 @@ const checkUnavailability = async (req: Request, res: Response, next: any) => {
     const nowMillis = Date.now()
 
     // if the unavailability is the current day the notification must be done before 10:00am
-    if(!req.body.date && nowMillis > todayMillis) { 
-        return res.status(StatusCodes.PRECONDITION_FAILED).json({ error: ReasonPhrases.PRECONDITION_FAILED})
+    if (!req.body.date && nowMillis > todayMillis) {
+        return res.status(StatusCodes.PRECONDITION_FAILED).json({ error: ReasonPhrases.PRECONDITION_FAILED })
     }
 
-    if(req.body.date) {
+    if (req.body.date) {
         const bodyDate = new Date(req.body.date)
         bodyDate.setHours(0, 0, 0, 0)
 
@@ -37,7 +37,7 @@ const checkUnavailability = async (req: Request, res: Response, next: any) => {
         deadLineToday.setDate(deadLineToday.getDate() + 1)
 
         // if the day is specified in the body of the request, check if that day is already passed
-        if(bodyDate.getMilliseconds < deadLineToday.getMilliseconds) {
+        if (bodyDate.getMilliseconds < deadLineToday.getMilliseconds) {
             return res.status(StatusCodes.PRECONDITION_FAILED).json({ error: ReasonPhrases.PRECONDITION_FAILED })
         }
     }
@@ -49,4 +49,14 @@ const moveToken = async (body: any) => {
     await axios.post(process.env.CAMUNDA_URL!, body)
 }
 
-export { checkDeadline, checkUnavailability, moveToken }
+export const newProcess = async (processId: string) => {
+    const time = new Date().getTime().toString()
+    const businessKey = `restaurant_${time}`
+    await axios.post(`http://camunda:8080/engine-rest/process-definition/key/${processId}/start`, {
+        businessKey
+    })
+
+    return businessKey
+}
+
+export { checkDeadline, checkUnavailability, moveToken };

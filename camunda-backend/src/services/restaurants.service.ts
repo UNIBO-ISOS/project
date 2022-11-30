@@ -2,6 +2,7 @@ import axios from "axios";
 import { HandlerArgs, Variables } from "camunda-external-task-client-js";
 import { Types } from "mongoose";
 import { Calendar, Restaurant } from "../repository/restaurants.repo";
+import { variablesFrom } from "./couriers.service";
 
 export const RetreiveRestaurants = async ({ task, taskService }: HandlerArgs) => {
     const start = new Date()
@@ -49,5 +50,72 @@ export const AskRestaurantAvailability = async ({ task, taskService }: HandlerAr
             bk: task.businessKey
         }
     })
+}
 
+export const VerifyUpdateConditions = async ({ task, taskService }: HandlerArgs) => {
+    let pv = variablesFrom(task.variables);
+    pv.set('canUpdate', new Date().getHours() < 16);
+
+    await taskService.complete(task, pv);
+}
+
+export const UpdateRestaurantInfo = async ({ task, taskService }: HandlerArgs) => {
+    try {
+        const restaurantUpdate = task.variables.get('update');
+
+        console.log(restaurantUpdate);
+        const restaurantId = task.variables.get('restaurantId');
+        switch (restaurantUpdate.type) {
+            case 'unavailability':
+                delete restaurantUpdate.type
+                console.log('hello')
+                const { date, motivation } = restaurantUpdate
+                console.log(restaurantUpdate);
+
+                const calendar = new Calendar({ date, motivation, id_restaurant: restaurantId });
+                await calendar.save();
+                break
+            case 'menu':
+                delete restaurantUpdate.type
+
+                await Restaurant.findOneAndUpdate({ _id: restaurantId }, restaurantUpdate)
+                break
+            default:
+                console.log('Unknown update type')
+        }
+    } catch (error) {
+        console.log(error)
+    } finally {
+        await taskService.complete(task, task.variables);
+    }
+}
+
+export const SendRestaurantNotUpdated = async ({ task, taskService }: HandlerArgs) => {
+    const reastaurantId = task.variables.get('restaurantId');
+    await axios.post(`http://restaurant-service:5000/api/restaurants/${reastaurantId}/updateResponse`, {
+        message: 'You could not update your restaurant info',
+        result: false
+    }, {
+        params: {
+            businessKey: task.businessKey
+        }
+    })
+    console.log('You could not update your restaurant info')
+
+    await taskService.complete(task, task.variables);
+}
+
+export const SendRestaurantUpdated = async ({ task, taskService }: HandlerArgs) => {
+    const reastaurantId = task.variables.get('restaurantId');
+    await axios.post(`http://restaurant-service:5000/api/restaurants/${reastaurantId}/updateResponse`, {
+        message: 'Restaurant information updated suscessfully',
+        result: true
+    }, {
+        params: {
+            businessKey: task.businessKey
+        }
+    })
+    console.log('Restaurant information updated suscessfully')
+
+    await taskService.complete(task, task.variables);
 }

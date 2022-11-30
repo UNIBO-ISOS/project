@@ -61,7 +61,7 @@ func UnlockMessageWithVariables(messageName, bkey string, processVariables Proce
 
 func StartNewProcess(bkey string) (int, error) {
 	res, err := http.Post(
-		"http://camunda:8080/engine-rest/process-definition/key/Process_0eo6cql/start",
+		"http://camunda:8080/engine-rest/process-definition/key/Process_0428wxq/start",
 		"application/json",
 		bytes.NewBuffer([]byte(`{
 			"businessKey": "`+bkey+`"

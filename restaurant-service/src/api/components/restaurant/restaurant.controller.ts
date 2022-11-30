@@ -1,8 +1,11 @@
 import { Request, Response } from 'express';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import { Types } from 'mongoose';
-import { moveToken } from '../../util/util';
+import { EventEmitter } from 'stream';
+import { moveToken, newProcess } from '../../util/util';
 import { Calendar, Restaurant } from './restaurant.model';
+
+let eventEmitter = new EventEmitter();
 
 const getAllRestaurants = async (req: Request, res: Response, next: any) => {
     try {
@@ -135,6 +138,60 @@ const getRestaurantAvailability = async (req: Request, res: Response, next: any)
     await moveToken(body)
 
     return res.status(StatusCodes.OK).json({ restaurant: restaurant.name, timestamp: timestamp, avilability: availability })
+}
+
+export const updateRestaurantInfo = async (req: Request, res: Response, next: any) => {
+    try {
+        const restaurantId = req.params.restaurantId
+        const update = req.body
+
+        const restaurant = await Restaurant.findById(restaurantId)
+        if (!restaurant) {
+            return res.status(StatusCodes.NOT_FOUND).json({ error: ReasonPhrases.NOT_FOUND })
+        }
+
+        const bk = await newProcess(process.env.RESTAURANT_UPDATE_PROCESS!)
+
+        const body = {
+            "messageName": process.env.MESSAGE_RESTAURANT_UPDATE!,
+            "businessKey": bk,
+            "processVariables": {
+                "restaurantId": {
+                    "value": restaurantId,
+                    "type": "String"
+                },
+                "update": {
+                    "value": JSON.stringify(update),
+                    "type": "Json"
+                }
+            }
+        }
+        moveToken(body)
+
+        eventEmitter.once(bk, (data) => {
+            console.log('inside once')
+            console.log(data)
+            if (data.success) {
+                return res.status(StatusCodes.OK).json(data)
+            } else {
+                return res.status(StatusCodes.BAD_REQUEST).json(data)
+            }
+        })
+    } catch (err) {
+        next(err)
+    }
+}
+
+export const waitForUpdateResponse = async (req: Request, res: Response, next: any) => {
+    // const { businessKey } = req.query
+    const businessKey = req.query.businessKey as string
+    const update = req.body
+
+    console.log(businessKey)
+
+    eventEmitter.emit(businessKey, update)
+
+    return res.status(StatusCodes.OK).json({ message: 'ok' })
 }
 
 export { getAllRestaurants, updateRestaurants, notifyUnavailability, getRestaurant, getRestaurantAvailability };
