@@ -33,23 +33,29 @@
 
     let openDialog = false;
 
+    let dialogOrderUnavailable = false;
     const handlePayment = async () => {
         localStorage.setItem("price", finalPrice);
-        await axios.post(
-            "http://localhost:3001/orders/",
-            {
-                restaurantId: cart[0].restaurantId,
-                price: finalPrice,
-                menu: cart.map((m) => m._id),
-            },
-            {
-                params: {
-                    businessKey: localStorage.getItem("businessKey"),
+        try {
+            const response = await axios.post(
+                "http://localhost:3001/orders/",
+                {
+                    restaurantId: cart[0].restaurantId,
+                    price: finalPrice,
+                    menu: cart.map((m) => m._id),
                 },
-            }
-        );
-        openDialog = true;
-        window.open("http://localhost:9090", "_blank").focus();
+                {
+                    params: {
+                        businessKey: localStorage.getItem("businessKey"),
+                    },
+                }
+            );
+            
+            openDialog = true;
+            window.open("http://localhost:9090", "_blank").focus();
+        } catch (err) {
+            dialogOrderUnavailable = true;
+        }
     };
 
     const handleSendToken = async () => {
@@ -82,6 +88,18 @@
                 on:click={() => {
                     handleSendToken();
                 }}>Invia</Button
+            >
+        </Actions>
+    </Dialog>
+
+    <Dialog bind:open={dialogOrderUnavailable}>
+        <Title>Ordine non disponibile</Title>
+        <Content>Il tuo ordine non è disponibile.</Content>
+        <Actions>
+            <Button
+                on:click={() => {
+                    dialogOrderUnavailable = false;
+                }}>Ok</Button
             >
         </Actions>
     </Dialog>

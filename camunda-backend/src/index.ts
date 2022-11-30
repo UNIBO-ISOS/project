@@ -9,7 +9,7 @@ import { verifyToken } from './services/bank.service';
 import { RetreiveCities, ReturnCities } from './services/cities.service';
 import { SelectCourier, SendCourierRequest, UpdateList } from './services/couriers.service';
 import { AskCouriersInRange } from './services/gis.service';
-import { CreateNewOrder, NotifyOrderCreated } from './services/order.service';
+import { CreateNewOrder, NotifyOrderCreated, NotifyOrderNotAvailable } from './services/order.service';
 import { AskRestaurantAvailability, RetreiveRestaurants, ReturnRestaurants, SendRestaurantNotUpdated, SendRestaurantUpdated, UpdateRestaurantInfo, VerifyUpdateConditions } from './services/restaurants.service';
 
 // configuration for the Client:
@@ -43,6 +43,7 @@ client.subscribe('courier-best', SelectCourier)
 // Order topics
 client.subscribe('create-order', CreateNewOrder)
 client.subscribe('send-order-created', NotifyOrderCreated)
+client.subscribe('send-order-unavailable', NotifyOrderNotAvailable)
 
 // GIS topics
 client.subscribe('gis-askCouriers', AskCouriersInRange)

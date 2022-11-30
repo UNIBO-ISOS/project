@@ -6,9 +6,6 @@ import { variablesFrom } from './couriers.service';
 export const CreateNewOrder = async ({ task, taskService }: HandlerArgs) => {
     const status = 'PENDING'
     const order = task.variables.get('order');
-    // const restaurantId = task.variables.get('restaurantId')
-    // const price = task.variables.get('price')
-    // const menuId = task.variables.get('menuId')
 
     const object: IOrder = {
         status: status,
@@ -25,7 +22,6 @@ export const CreateNewOrder = async ({ task, taskService }: HandlerArgs) => {
 }
 
 export const NotifyOrderCreated = async ({ task, taskService }: HandlerArgs) => {
-    // TODO: Notify order created
     const bk = task.businessKey;
 
     const body = {
@@ -42,7 +38,16 @@ export const NotifyOrderCreated = async ({ task, taskService }: HandlerArgs) => 
 }
 
 export const NotifyOrderNotAvailable = async ({ task, taskService }: HandlerArgs) => {
-    // TODO: notify order not available
+    const bk = task.businessKey;
+
+    const body = {
+        orderId: task.variables.get('orderId'),
+        status: 'error',
+        message: 'Order could not be created'
+    }
+    // send-order-created
+    await axios.post('http://customer-server:3001/orders/wait', body, { headers: { businessKey: bk } });
+
 
     await taskService.complete(task)
 }

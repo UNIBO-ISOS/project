@@ -46,12 +46,15 @@ export const SelectCourier = async ({ task, taskService }: HandlerArgs) => {
     // console.log(courierList);
     console.log("Compute best courier");
 
+    let pvar = variablesFrom(task.variables)
     if (courierList == undefined || courierList.length <= 0) {
         console.log("No couriers available");
+        pvar.set("courierAvailable", false)
         await taskService.complete(task, task.variables);
         return;
     }
 
+    pvar.set("courierAvailable", true)
 
     // Select the cheapest courier
     let courier = courierList[0];
@@ -61,8 +64,8 @@ export const SelectCourier = async ({ task, taskService }: HandlerArgs) => {
         }
     }
 
-    let pvar = variablesFrom(task.variables);
     pvar.set('courier', courier)
+
     // Complete the task
     await taskService.complete(task, pvar)
 }
