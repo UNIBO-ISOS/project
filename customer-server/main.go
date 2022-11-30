@@ -20,6 +20,8 @@ func main() {
 	// Enable CORS
 	config := cors.Config{}
 	config.AllowAllOrigins = true
+	config.AllowMethods = []string{"GET", "POST", "PUT", "DELETE"}
+	config.AllowHeaders = []string{"Origin", "Content-Length", "Content-Type"}
 	router.Use(cors.New(config))
 
 	cityController := controller.CityController{}
@@ -31,6 +33,14 @@ func main() {
 	restaurants := router.Group("/restaurants")
 	restaurants.GET("/", restaurantController.GetRestaurants)
 	restaurants.POST("/", restaurantController.PostRestaurants)
+
+	orderController := controller.OrderController{}
+	orders := router.Group("/orders")
+	{
+		orders.POST("/", orderController.SendOrder)
+		orders.POST("/wait", orderController.WaitForSendOrder)
+		orders.POST("/sendToken", orderController.SendToken)
+	}
 
 	router.Run(":3001")
 }

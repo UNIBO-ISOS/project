@@ -7,3 +7,7 @@ func CityEvent(bk string) string {
 func RestaurantEvent(bk string) string {
 	return "restaurantEvent_" + bk
 }
+
+func OrderEvent(bk string) string {
+	return "orderEvent_" + bk
+}

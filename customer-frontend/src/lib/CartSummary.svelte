@@ -1,6 +1,9 @@
 <script>
     import Button from "@smui/button";
+    import Dialog, { Actions, Content, Title } from "@smui/dialog";
     import List, { Item, Text } from "@smui/list";
+    import TextField from "@smui/textfield";
+    import axios from "axios";
     export let cart;
 
     const handleClick = (menu) => {
@@ -16,7 +19,6 @@
 
         return acc;
     }, {});
-    $: console.log(groupedCart);
 
     const toList = (d) => {
         let arr = [];
@@ -28,10 +30,62 @@
     };
 
     $: finalPrice = cart.reduce((acc, curr) => acc + curr.price, 0);
+
+    let openDialog = false;
+
+    const handlePayment = async () => {
+        localStorage.setItem("price", finalPrice);
+        await axios.post(
+            "http://localhost:3001/orders/",
+            {
+                restaurantId: cart[0].restaurantId,
+                price: finalPrice,
+                menu: cart.map((m) => m._id),
+            },
+            {
+                params: {
+                    businessKey: localStorage.getItem("businessKey"),
+                },
+            }
+        );
+        openDialog = true;
+        window.open("http://localhost:9090", "_blank").focus();
+    };
+
+    const handleSendToken = async () => {
+        await axios.post(
+            "http://localhost:3001/orders/sendToken",
+            { token, amount: finalPrice },
+            {
+                params: {
+                    businessKey: localStorage.getItem("businessKey"),
+                },
+            }
+        );
+
+        openDialog = false;
+    };
+
+    let token = "";
 </script>
 
 <div>
     <h2>Il tuo carrello</h2>
+    <Dialog bind:open={openDialog} escapeKeyAction="" scrimClickAction="">
+        <Title>Token</Title>
+        <Content>
+            Inserisci il token ricevuto dalla tua banca
+            <TextField bind:value={token} label="Token" />
+        </Content>
+        <Actions>
+            <Button
+                on:click={() => {
+                    handleSendToken();
+                }}>Invia</Button
+            >
+        </Actions>
+    </Dialog>
+
     <List>
         {#each toList(groupedCart) as menu}
             <Item
@@ -47,7 +101,9 @@
     </List>
     <div class="summary-confirm">
         <h3>Totale: {finalPrice}€</h3>
-        <Button variant="raised">Conferma</Button>
+        <Button on:click={() => handlePayment()} variant="raised"
+            >Conferma</Button
+        >
     </div>
 </div>
 

@@ -22,7 +22,7 @@ import (
     }
 */
 
-type ProcessVariable = map[string]map[string]string
+type ProcessVariable = map[string]map[string]interface{}
 
 type ReceiveMessage struct {
 	MessageName      string          `json:"messageName"`
@@ -33,10 +33,9 @@ type ReceiveMessage struct {
 
 func UnlockMessage(messageName, bkey string) (int, error) {
 	msg := ReceiveMessage{
-		MessageName:      messageName,
-		BusinessKey:      bkey,
-		ResultEnabled:    true,
-		ProcessVariables: map[string]map[string]string{},
+		MessageName:   messageName,
+		BusinessKey:   bkey,
+		ResultEnabled: true,
 	}
 
 	body, _ := json.Marshal(msg)
@@ -52,6 +51,9 @@ func UnlockMessageWithVariables(messageName, bkey string, processVariables Proce
 		ResultEnabled:    true,
 		ProcessVariables: processVariables,
 	}
+
+	obj, err := json.Marshal(msg)
+	fmt.Println(string(obj))
 
 	body, _ := json.Marshal(msg)
 	res, err := http.Post("http://camunda:8080/engine-rest/message/", "application/json", bytes.NewBuffer(body))
