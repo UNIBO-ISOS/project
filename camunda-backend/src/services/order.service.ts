@@ -1,13 +1,25 @@
 import { HandlerArgs } from 'camunda-external-task-client-js';
-import { Order } from '../repository/order.repo';
+import { IOrder, Order } from '../repository/order.repo';
 import { variablesFrom } from './couriers.service';
 
 export const CreateNewOrder = async ({ task, taskService }: HandlerArgs) => {
-    // TODO: Create new order on mongo
-    const { _id } = new Order();
+    const status = 'PENDING'
+    const restaurantId = task.variables.get('restaurantId')
+    const price = task.variables.get('price')
+    const menuId = task.variables.get('menuId')
+
+    const object: IOrder = {
+        status: status,
+        restaurantId: restaurantId,
+        price: price,
+        menuId: menuId
+    }
+
+    const document = new Order(object);
+    const id = await document.save()
 
     const pvar = variablesFrom(task.variables)
-    pvar.set("orderId", _id)
+    pvar.set("orderId", id)
 
     await taskService.complete(task, pvar)
 }
