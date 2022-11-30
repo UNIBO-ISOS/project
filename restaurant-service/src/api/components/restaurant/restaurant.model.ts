@@ -120,7 +120,7 @@ interface IclosedRestaurantCalendar {
 }
 
 const closedRestaurantCalendar = new Schema<IclosedRestaurantCalendar>({
-    id_restaurant: { type: Schema.Types.ObjectId, ref: 'restaurant', required: true },
+    id_restaurant: { type: Schema.Types.ObjectId, ref: 'restaurants', required: true },
     date: { type: Date, required: true, default: (new Date()).setHours(0, 0, 0, 0) },
     motivation: { type: String, required: true}
 });
