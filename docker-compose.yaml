@@ -85,6 +85,8 @@ services:
     build: ./bank-frontend
     ports:
       - "9090:9999"
+    depends_on:
+      - soap-service
   customer-frontend:
     container_name: customer-frontend
     build: ./customer-frontend

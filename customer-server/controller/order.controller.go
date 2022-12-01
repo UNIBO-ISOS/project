@@ -25,6 +25,10 @@ type TokenValidationRequest struct {
 	Amount int    `json:"amount"`
 }
 
+type TokenValidatedResponse struct {
+	Validated bool `json:"validated"`
+}
+
 func (o *OrderController) SendOrder(ctx *gin.Context) {
 	var wg sync.WaitGroup
 	var order model.Order
@@ -80,28 +84,9 @@ func (o *OrderController) WaitForSendOrder(ctx *gin.Context) {
 }
 
 func (o *OrderController) SendToken(ctx *gin.Context) {
-	/*
-			{
-		"messageName": "GetCustomerToken",
-		"businessKey": "default",
-		"resultEnabled" : true,
-		"processVariables": {
-		        "token": {
-		            "value": "mysupersecuretoken",
-		            "type": "String"
-		        },
-		        "toUser": {
-		            "value": "acmeat",
-		            "type": "String"
-		        },
-		        "amount": {
-		            "value": 50,
-		            "type": "Integer"
-		        }
-		    }
-		} */
-
+	var wg sync.WaitGroup
 	var tokenValidation TokenValidationRequest
+	var response TokenValidatedResponse
 	ctx.ShouldBindJSON(&tokenValidation)
 	bk := ctx.Query("businessKey")
 
@@ -112,5 +97,34 @@ func (o *OrderController) SendToken(ctx *gin.Context) {
 	}
 	code, err := utils.UnlockMessageWithVariables("GetCustomerToken", bk, pv)
 	utils.GuardAgainstBadRequest(err, code, ctx)
-	ctx.JSON(200, gin.H{"message": "ok"})
+
+	fmt.Println("Waiting for token validation")
+	fmt.Println("Business key: ", bk)
+	wg.Add(1)
+	go ee.Once(events.TokenValidationEvent(bk), func(data TokenValidatedResponse) {
+		response = data
+		wg.Done()
+	})
+	wg.Wait()
+	fmt.Println("Token validation received")
+
+	status := http.StatusOK
+	if !response.Validated {
+		status = http.StatusBadRequest
+	}
+
+	ctx.JSON(status, response)
+}
+
+func (o *OrderController) SendVerifyToken(ctx *gin.Context) {
+	var response TokenValidatedResponse
+	fmt.Println("abcabc")
+	err := ctx.ShouldBindJSON(&response)
+	utils.GuradAgainstError(err, ctx)
+
+	bk := ctx.Request.Header.Get("businessKey")
+	fmt.Println(bk)
+
+	ee.Emit(events.TokenValidationEvent(bk), response)
+	ctx.JSON(http.StatusOK, response)
 }

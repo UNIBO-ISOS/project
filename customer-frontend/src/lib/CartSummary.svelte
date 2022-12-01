@@ -2,6 +2,7 @@
     import Button from "@smui/button";
     import Dialog, { Actions, Content, Title } from "@smui/dialog";
     import List, { Item, Text } from "@smui/list";
+    import SnackBar, { Label } from "@smui/snackbar";
     import TextField from "@smui/textfield";
     import axios from "axios";
     export let cart;
@@ -50,7 +51,7 @@
                     },
                 }
             );
-            
+
             openDialog = true;
             window.open("http://localhost:9090", "_blank").focus();
         } catch (err) {
@@ -58,18 +59,29 @@
         }
     };
 
+    let snackBar;
+    let snackBarText = "";
     const handleSendToken = async () => {
-        await axios.post(
-            "http://localhost:3001/orders/sendToken",
-            { token, amount: finalPrice },
-            {
-                params: {
-                    businessKey: localStorage.getItem("businessKey"),
-                },
-            }
-        );
+        try {
+            await axios.post(
+                "http://localhost:3001/orders/sendToken",
+                { token, amount: finalPrice },
+                {
+                    params: {
+                        businessKey: localStorage.getItem("businessKey"),
+                    },
+                }
+            );
 
-        openDialog = false;
+            snackBarText = "Token convalidato correttamente";
+        } catch (err) {
+            console.log(err);
+            snackBarText = "Errore nell'invio del token";
+        } finally {
+            openDialog = false;
+            console.log('end')
+            snackBar.open();
+        }
     };
 
     let token = "";
@@ -103,6 +115,10 @@
             >
         </Actions>
     </Dialog>
+
+    <SnackBar bind:this={snackBar}>
+        <Label>{snackBarText}</Label>
+    </SnackBar>
 
     <List>
         {#each toList(groupedCart) as menu}

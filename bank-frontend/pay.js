@@ -71,7 +71,7 @@ $(document).ready(() => {
 			$("#pay_btn").prop("disabled", true);
 		} else $;
 		{
-			"#pay_btn".prop("disabled", false);
+			$("#pay_btn").prop("disabled", false);
 		}
 	});
 });

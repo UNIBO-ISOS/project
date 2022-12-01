@@ -5,7 +5,7 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 import * as mongoose from 'mongoose';
-import { verifyToken } from './services/bank.service';
+import { SendSuccessfulVerification, SendUnsuccessfulVerification, verifyToken } from './services/bank.service';
 import { RetreiveCities, ReturnCities } from './services/cities.service';
 import { SelectCourier, SendCourierRequest, UpdateList } from './services/couriers.service';
 import { AskCouriersInRange } from './services/gis.service';
@@ -44,6 +44,8 @@ client.subscribe('courier-best', SelectCourier)
 client.subscribe('create-order', CreateNewOrder)
 client.subscribe('send-order-created', NotifyOrderCreated)
 client.subscribe('send-order-unavailable', NotifyOrderNotAvailable)
+client.subscribe('send-unsuccessful-verification', SendUnsuccessfulVerification)
+client.subscribe('send-successful-verification', SendSuccessfulVerification)
 
 // GIS topics
 client.subscribe('gis-askCouriers', AskCouriersInRange)

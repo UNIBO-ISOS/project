@@ -11,3 +11,7 @@ func RestaurantEvent(bk string) string {
 func OrderEvent(bk string) string {
 	return "orderEvent_" + bk
 }
+
+func TokenValidationEvent(bk string) string {
+	return "tokenValidationEvent_" + bk
+}

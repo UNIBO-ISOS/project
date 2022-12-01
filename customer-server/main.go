@@ -40,6 +40,7 @@ func main() {
 		orders.POST("/", orderController.SendOrder)
 		orders.POST("/wait", orderController.WaitForSendOrder)
 		orders.POST("/sendToken", orderController.SendToken)
+		orders.POST("/verifyToken", orderController.SendVerifyToken)
 	}
 
 	router.Run(":3001")
