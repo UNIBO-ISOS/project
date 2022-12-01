@@ -3,62 +3,10 @@
         "_id": { "$oid": "633ed0966600b5005661fdc6" },
         "name": "Crudo",
         "city": { "$oid": "62f6668ec28d1d9c5ccf326d" },
-        "user": { "$oid": "62fe5ffc321930aecba76d37" },
         "location": {
             "type": "Point",
-            "coordinates": [44.6516487, 10.7724963]
+            "coordinates": [ 10.7724963, 44.6516487 ]
         },
-        "hours": [
-            {
-                "day": "Monday",
-                "timetable": [
-                    { "start": "1200", "finish": "1500" },
-                    { "start": "1900", "finish": "0000"}
-                ]
-            },
-            {
-                "day": "Tuesday",
-                "timetable": [
-                    { "start": "1200", "finish": "1500" },
-                    { "start": "1900", "finish": "0000"}
-                ]
-            },
-            {
-                "day": "Wednesday",
-                "timetable": [
-                    { "start": "1200", "finish": "1500" },
-                    { "start": "1900", "finish": "0000"}
-                ]
-            },
-            {
-                "day": "Thursday",
-                "timetable": [
-                    { "start": "1200", "finish": "1500" },
-                    { "start": "1900", "finish": "0000"}
-                ]
-            },
-            {
-                "day": "Friday",
-                "timetable": [
-                    { "start": "1200", "finish": "1500" },
-                    { "start": "1900", "finish": "0030"}
-                ]
-            },
-            {
-                "day": "Saturday",
-                "timetable": [
-                    { "start": "1200", "finish": "1530" },
-                    { "start": "1900", "finish": "0030"}
-                ]
-            },
-            {
-                "day": "Sunday",
-                "timetable": [
-                    { "start": "1200", "finish": "1530" },
-                    { "start": "1900", "finish": "2330"}
-                ]
-            }
-        ],
         "menu": [
             {
                 "_id": { "$oid": "630b6dc0711c25088d9cac1d" },
@@ -67,14 +15,11 @@
                 "price": 15.00,
                 "items": [
                     {
-                        "_id": { "$oid": "630b6ded4fe85a2dd1b76896" },
                         "name": "Tiger Roll",
                         "category": 0
-                    },
-                    {
-                        "_id": { "$oid": "630b6e02d3b8e4fb83a221db" },
-                        "name": "Tiger Roll Spicy",
-                        "category": 0
+                    }, {
+                        "name": "Water",
+                        "category": 1
                     }
                 ],
                 "categories": [
@@ -83,19 +28,16 @@
             },
             {
                 "_id": { "$oid": "6340448a613f8a91e95b93aa" },
-                "name": "Close sushi",
+                "name": "Jumbo Box",
                 "desc": "some specific description",
                 "price": 15.00,
                 "items": [
                     {
-                        "_id": { "$oid": "634044a672b13d969a127316" },
                         "name": "Leon Roll",
                         "category": 0
-                    },
-                    {
-                        "_id": { "$oid": "634044e0dd9791cfba709386" },
-                        "name": "Water",
-                        "category": 1
+                    }, {
+                        "name": "Tiger Roll Spicy",
+                        "category": 0
                     }
                 ],
                 "categories": [
@@ -109,55 +51,10 @@
         "_id": { "$oid": "633ed0966600b5005661fdc7" },
         "name": "Istanbul Doner Kebab pizza",
         "city": { "$oid": "62f6668ec28d1d9c5ccf326d" },
-        "user": { "$oid": "62fe6004321930aecba76d39" },
         "location": {
             "type": "Point",
-            "coordinates": [44.655062, 10.773937]
+            "coordinates": [ 10.773937, 44.655062 ]
         },
-        "hours": [
-            {
-                "day": "Monday",
-                "timetable": [
-                    { "start": "1100", "finish": "2330" }
-                ]
-            },
-            {
-                "day": "Tuesday",
-                "timetable": [
-                    { "start": "1100", "finish": "2330" }
-                ]
-            },
-            {
-                "day": "Wednesday",
-                "timetable": [
-                    { "start": "1100", "finish": "2330" }
-                ]
-            },
-            {
-                "day": "Thursday",
-                "timetable": [
-                    { "start": "1100", "finish": "2330" }
-                ]
-            },
-            {
-                "day": "Friday",
-                "timetable": [
-                    { "start": "1100", "finish": "2330" }
-                ]
-            },
-            {
-                "day": "Saturday",
-                "timetable": [
-                    { "start": "1100", "finish": "2330" }
-                ]
-            },
-            {
-                "day": "Sunday",
-                "timetable": [
-                    { "start": "1100", "finish": "2330" }
-                ]
-            }
-        ],
         "menu": [
             {
                 "_id": { "$oid": "630b6e1709018304315e5296" },
@@ -166,13 +63,155 @@
                 "price": 5.00,
                 "items": [
                     {
-                        "_id": { "$oid": "630b6e22f024ca0ad6dd9c8b" },
                         "name": "Kebab",
                         "category": 0
                     },
                     {
-                        "_id": { "$oid": "630b6e2ea3b7024603473517" },
                         "name": "Pepsi",
+                        "category": 1
+                    }
+                ],
+                "categories": [
+                    "Food",
+                    "Drink"
+                ]
+            }
+        ]
+    },
+    {
+        "_id": { "$oid": "6388a8652c0027eb88e30639" },
+        "name": "Oktoberfest",
+        "city": { "$oid": "62f6669b31f01fef71221cc3" },
+        "location": {
+            "type": "Point",
+            "coordinates": [ 10.6058319, 44.7068253 ]
+        },
+        "menu": [
+            {
+                "_id": { "$oid": "6388a8fd1483cb074044ba3f" },
+                "name": "Hamburger Menu",
+                "desc": "some description",
+                "price": 25.00,
+                "items": [
+                    {
+                        "name": "Hamburger",
+                        "category": 0
+                    },
+                    {
+                        "name": "Beer",
+                        "category": 1
+                    }
+                ],
+                "categories": [
+                    "Food",
+                    "Drink"
+                ]
+            },
+            {
+                "_id": { "$oid": "6388a94ea5d2e737b3688b93" },
+                "name": "Spaghetti Western",
+                "desc": "some specific description",
+                "price": 10.00,
+                "items": [
+                    {
+                        "name": "Lo chiamavano trinnità",
+                        "category": 0
+                    },
+                    {
+                        "name": "Coke",
+                        "category": 1
+                    }
+                ],
+                "categories": [
+                    "Food",
+                    "Drink"
+                ]
+            }
+        ]
+    },
+    {
+        "_id": { "$oid": "6388ac058c6922ca8b7c40c3" },
+        "name": "Arrogant",
+        "city": { "$oid": "62f6669b31f01fef71221cc3" },
+        "location": {
+            "type": "Point",
+            "coordinates": [ 10.6289225, 44.6791146]
+        },
+        "menu": [
+            {
+                "_id": { "$oid": "6388ac14c1607366e51d1f34" },
+                "name": "Arrogant menu",
+                "desc": "some description",
+                "price": 35.00,
+                "items": [
+                    {
+                        "name": "Cheeseburger",
+                        "category": 0
+                    },
+                    {
+                        "name": "Beer",
+                        "category": 1
+                    }
+                ],
+                "categories": [
+                    "Food",
+                    "Drink"
+                ]
+            }
+        ]
+    },
+    {
+        "_id": { "$oid": "6388acf139a5d34eb63cb9b3" },
+        "name": "Vecchia Pirri",
+        "city": { "$oid": "62f666aaeb58fbf770cfbf3c" },
+        "location": {
+            "type": "Point",
+            "coordinates": [ 10.9323386, 44.6397019 ]
+        },
+        "menu": [
+            {
+                "_id": { "$oid": "6388ad704760f6ed76a9ee21" },
+                "name": "Menu Tradizionale",
+                "desc": "some description",
+                "price": 27.00,
+                "items": [
+                    {
+                        "name": "Capelletti in brodo",
+                        "category": 0
+                    },
+                    {
+                        "name": "Lambrusco",
+                        "category": 1
+                    }
+                ],
+                "categories": [
+                    "Food",
+                    "Drink"
+                ]
+            }
+        ]
+    },
+    {
+        "_id": { "$oid": "6388acf139a5d34eb63cb9b3" },
+        "name": "La Bella Regina Margherita",
+        "city": { "$oid": "62f666aaeb58fbf770cfbf3c" },
+        "location": {
+            "type": "Point",
+            "coordinates": [ 10.9323386, 44.6397019 ]
+        },
+        "menu": [
+            {
+                "_id": { "$oid": "6388ad704760f6ed76a9ee21" },
+                "name": "Pizza",
+                "desc": "some description",
+                "price": 27.00,
+                "items": [
+                    {
+                        "name": "margherita",
+                        "category": 0
+                    },
+                    {
+                        "name": "Water",
                         "category": 1
                     }
                 ],
