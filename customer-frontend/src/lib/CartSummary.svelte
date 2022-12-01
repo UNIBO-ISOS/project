@@ -93,7 +93,7 @@
         <Title>Token</Title>
         <Content>
             Inserisci il token ricevuto dalla tua banca
-            <TextField bind:value={token} label="Token" />
+            <TextField style={"width: 100%"} bind:value={token} label="Token" />
         </Content>
         <Actions>
             <Button
@@ -142,11 +142,6 @@
 </div>
 
 <style>
-    .item {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-    }
     .summary-confirm {
         display: flex;
         flex-direction: row;
