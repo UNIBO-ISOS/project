@@ -61,16 +61,17 @@ $(document).ready(() => {
 	$("#to_user").val("acmeat");
 	$("#pay_btn").on("click", payment);
 	$("#copy_token_btn").prop("disabled", true);
+	$("#pay_btn").prop("disabled", true);
 	$("#amount").on("keyup", (e) => {
 		if (e.key == "Enter") {
 			payment();
 		}
 	});
 	$("#amount").on("change keydown paste input", function () {
-		if (!($("#amount").val() === "")) {
+		const amount = $("#amount").val();
+		if (amount == "") {
 			$("#pay_btn").prop("disabled", true);
-		} else $;
-		{
+		} else {
 			$("#pay_btn").prop("disabled", false);
 		}
 	});
