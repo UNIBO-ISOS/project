@@ -17,6 +17,8 @@ const sendSoap = (body) => {
 				const transaction_token = token[0].outerText;
 
 				$("#token_label").val(transaction_token);
+				localStorage.setItem("transaction_token", transaction_token);
+				$("#copy_token_btn").prop("disabled", false);
 			}
 		}
 	};
@@ -50,11 +52,26 @@ function payment() {
 	sendPaymentRequest(sid, amount, to_user);
 }
 
+function copyToClipboard() {
+	const transaction_token = localStorage.getItem("transaction_token");
+	navigator.clipboard.writeText(transaction_token);
+}
+
 $(document).ready(() => {
+	$("#to_user").val("acmeat");
 	$("#pay_btn").on("click", payment);
+	$("#copy_token_btn").prop("disabled", true);
 	$("#amount").on("keyup", (e) => {
 		if (e.key == "Enter") {
 			payment();
+		}
+	});
+	$("#amount").on("change keydown paste input", function () {
+		if (!($("#amount").val() === "")) {
+			$("#pay_btn").prop("disabled", true);
+		} else $;
+		{
+			"#pay_btn".prop("disabled", false);
 		}
 	});
 });
