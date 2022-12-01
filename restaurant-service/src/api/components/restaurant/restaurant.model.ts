@@ -26,21 +26,9 @@ const citySchema = new Schema<ICity>({
 interface IRestaurant {
     name: String,
     city: ObjectId,
-    //user: ObjectId,
     location: {
         type: GeoJsonTypes, coordinates: number[]
     },
-    hours: [
-        {
-            day: String,
-            timetable: [
-                {
-                    start: String,
-                    finish: String
-                }
-            ]
-        }
-    ],
     menu: [
         {
             name: String,
@@ -74,23 +62,6 @@ const restaurantSchema = new Schema<IRestaurant>({
             required: true
         }
     },
-    hours: [
-        {
-            _id: false,
-            day: {
-                type: String,
-                enum: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-                required: true
-            },
-            timetable: [
-                {
-                    _id: false,
-                    start: { type: String, required: true },
-                    finish: { type: String, required: true }
-                }
-            ]
-        }
-    ],
     menu: [
         {
             name: { type: String, required: true },
