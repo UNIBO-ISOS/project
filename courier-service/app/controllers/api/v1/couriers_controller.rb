@@ -17,7 +17,7 @@ class Api::V1::CouriersController < ApplicationController
         @price_proposal = rand(10...42) 
 
         #render json: { }, stauts: 200
-
+        @priceKey = "price" << params[:id]
         @proposal_with_bk = {
             messageName: "Message_rcvPrice",
             businessKey: params[:bk],
@@ -27,7 +27,7 @@ class Api::V1::CouriersController < ApplicationController
                     type: "String"
                 }
             },
-            processVariables: {
+            processVariablesLocal: {
                 price: {
                     value: @price_proposal,
                     type: "Double"
@@ -35,10 +35,11 @@ class Api::V1::CouriersController < ApplicationController
             }
         }
 
-        render json: {params: params},  status: 200
-
         #puts @proposal_with_bk
         send_data_to_unlock_token(@proposal_with_bk)
+
+        render json: {params: params},  status: 200
+
     end
 
     def confirm
@@ -62,5 +63,7 @@ class Api::V1::CouriersController < ApplicationController
                 "Content-Type" => "application/json"
             }
         )
+
+        puts response
     end
 end

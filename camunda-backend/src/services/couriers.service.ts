@@ -6,12 +6,16 @@ interface PriceProposal {
     price: number;
 }
 
+const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
+
 export const SendCourierRequest = async ({ task, taskService }: HandlerArgs) => {
-    const courierId = task.variables.get('courierId');
-
-    await taskService.complete(task, task.variables)
-
     try {
+        console.log('SendCourierRequest');
+        const courierId = task.variables.get('courierId');
+
+        console.log(`Sent request to courier ${courierId}`);
+
+        await taskService.complete(task, task.variables)
         await axios.get("http://courier-service:3000/api/v1/availability/" + courierId, {
             params: {
                 bk: task.businessKey
@@ -22,49 +26,27 @@ export const SendCourierRequest = async ({ task, taskService }: HandlerArgs) => 
     }
 }
 
-export const UpdateList = async ({ task, taskService }: HandlerArgs) => {
-    const price = task.variables.get('price');
-    const courierId: string | undefined = task.variables.get('courierId');
-
-    const pvar = variablesFrom(task.variables)
-    const list: any[] = pvar.get("auction")
-    if (list == undefined) {
-        pvar.set("auction", [{ price, courierId }])
-    } else {
-        list.push({ price, courierId })
-        pvar.set("auction", list)
-    }
-
-
-
-    // Complete the task
-    await taskService.complete(task, pvar)
-}
-
 export const SelectCourier = async ({ task, taskService }: HandlerArgs) => {
-    const courierList = task.variables.get('auction');
+    // const courierList = task.variables.get('auction');
     // console.log(courierList);
     console.log("Compute best courier");
 
     let pvar = variablesFrom(task.variables)
-    if (courierList == undefined || courierList.length <= 0) {
-        console.log("No couriers available");
-        pvar.set("courierAvailable", false)
-        await taskService.complete(task, task.variables);
-        return;
-    }
+    let couriers = pvar.get("couriers")
+    let courier = undefined;
+    let maxPrice = Number.MAX_VALUE;
 
-    pvar.set("courierAvailable", true)
-
-    // Select the cheapest courier
-    let courier = courierList[0];
-    for (let i = 1; i < courierList.length; i++) {
-        if (courierList[i].price < courier.price) {
-            courier = courierList[i];
+    for (let id of couriers) {
+        const price = pvar.get(`courier-${id}`);
+        if (typeof price == "number" && price < maxPrice) {
+            maxPrice = price;
+            courier = { id, price };
         }
     }
 
     pvar.set('courier', courier)
+    pvar.set('courierAvailable', courier != undefined)
+    console.log(courier)
 
     // Complete the task
     await taskService.complete(task, pvar)

@@ -7,7 +7,7 @@ dotenv.config();
 import * as mongoose from 'mongoose';
 import { SendSuccessfulVerification, SendUnsuccessfulVerification, verifyToken } from './services/bank.service';
 import { RetreiveCities, ReturnCities } from './services/cities.service';
-import { SelectCourier, SendCourierRequest, UpdateList } from './services/couriers.service';
+import { SelectCourier, SendCourierRequest } from './services/couriers.service';
 import { AskCouriersInRange } from './services/gis.service';
 import { CreateNewOrder, NotifyOrderCreated, NotifyOrderNotAvailable } from './services/order.service';
 import { AskRestaurantAvailability, RetreiveRestaurants, ReturnRestaurants, SendRestaurantNotUpdated, SendRestaurantUpdated, UpdateRestaurantInfo, VerifyUpdateConditions } from './services/restaurants.service';
@@ -37,7 +37,7 @@ client.subscribe('feasable-restaurant-update', SendRestaurantUpdated)
 
 // Couriers topics
 client.subscribe('courier-askAvailiability', SendCourierRequest)
-client.subscribe('courier-update', UpdateList)
+// client.subscribe('courier-update', UpdateList)
 client.subscribe('courier-best', SelectCourier)
 
 // Order topics
