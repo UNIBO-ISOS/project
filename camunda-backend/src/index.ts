@@ -9,7 +9,7 @@ import { SendSuccessfulVerification, SendUnsuccessfulVerification, verifyToken }
 import { RetreiveCities, ReturnCities } from './services/cities.service';
 import { SelectCourier, SendCourierRequest } from './services/couriers.service';
 import { AskCouriersInRange } from './services/gis.service';
-import { CreateNewOrder, NotifyOrderCreated, NotifyOrderNotAvailable } from './services/order.service';
+import { CreateNewOrder, NotifyOrderCreated, NotifyOrderNotAvailable, SendOrderCancelled, SendOrderNotCancelled, VerifyCancelCondition } from './services/order.service';
 import { AskRestaurantAvailability, RetreiveRestaurants, ReturnRestaurants, SendRestaurantNotUpdated, SendRestaurantUpdated, UpdateRestaurantInfo, VerifyUpdateConditions } from './services/restaurants.service';
 
 // configuration for the Client:
@@ -46,6 +46,9 @@ client.subscribe('send-order-created', NotifyOrderCreated)
 client.subscribe('send-order-unavailable', NotifyOrderNotAvailable)
 client.subscribe('send-unsuccessful-verification', SendUnsuccessfulVerification)
 client.subscribe('send-successful-verification', SendSuccessfulVerification)
+client.subscribe('verify-cancel-condition', VerifyCancelCondition)
+client.subscribe('send-cancel-denied', SendOrderNotCancelled)
+client.subscribe('send-cancel-successful', SendOrderCancelled)
 
 // GIS topics
 client.subscribe('gis-askCouriers', AskCouriersInRange)

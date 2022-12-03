@@ -7,6 +7,7 @@
     import axios from "axios";
     export let cart;
     export let hour;
+    export let orderEmitted;
 
     const handleClick = (menu) => {
         cart = cart.filter((m) => m._id !== menu._id);
@@ -77,6 +78,7 @@
             );
 
             snackBarText = "Token convalidato correttamente";
+            orderEmitted = true;
         } catch (err) {
             console.log(err);
             snackBarText = "Errore nell'invio del token";

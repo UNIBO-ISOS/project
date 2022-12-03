@@ -51,3 +51,57 @@ export const NotifyOrderNotAvailable = async ({ task, taskService }: HandlerArgs
 
     await taskService.complete(task)
 }
+
+export const VerifyCancelCondition = async ({ task, taskService }: HandlerArgs) => {
+    const orderId = task.variables.get('orderId');
+    const pv = variablesFrom(task.variables)
+
+    const order = await Order.findById(orderId);
+    if (order == undefined) {
+        pv.set('cancel', false)
+        await taskService.complete(task, pv)
+        return
+    }
+
+    const now = [new Date().getHours(), new Date().getMinutes()];
+    const hours = order.hour.split(":")
+    const orderTime = [parseInt(hours[0]), parseInt(hours[1])]
+    const nowSeconds = now[0] * 3600 + now[1] * 60;
+    const orderSeconds = orderTime[0] * 3600 + orderTime[1] * 60;
+
+    if (orderSeconds - nowSeconds > 3600) {
+        order.status = 'CANCELLED'
+        await order.save();
+        pv.set('cancel', true)
+        await taskService.complete(task, pv)
+        return
+    }
+
+    console.log(now)
+    console.log(orderTime)
+
+    pv.set('cancel', false)
+    await taskService.complete(task, pv)
+}
+
+export const SendOrderCancelled = async ({ task, taskService }: HandlerArgs) => {
+    const bk = task.businessKey;
+
+    const body = {
+        status: true
+    }
+    // send-order-created
+    await axios.post('http://customer-server:3001/orders/waitCancel', body, { headers: { businessKey: bk } });
+    await taskService.complete(task)
+}
+
+export const SendOrderNotCancelled = async ({ task, taskService }: HandlerArgs) => {
+    const bk = task.businessKey;
+
+    const body = {
+        status: false
+    }
+    // send-order-created
+    await axios.post('http://customer-server:3001/orders/waitCancel', body, { headers: { businessKey: bk } });
+    await taskService.complete(task)
+}

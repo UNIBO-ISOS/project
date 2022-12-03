@@ -17,14 +17,14 @@
     export let city;
 </script>
 
-<div style="margin-top: 1rem;">
+<div style="flex: 1">
     <div>
         <h2>Seleziona il tuo comune</h2>
 
         {#await options}
             <div>Caricamento</div>
         {:then options}
-            <Select variant="outlined" bind:value={city} style="width: 45vw;">
+            <Select variant="outlined" bind:value={city} style="width: 100%">
                 {#each options as option}
                     <Option value={option}>{option.name}</Option>
                 {/each}

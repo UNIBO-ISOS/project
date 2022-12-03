@@ -15,3 +15,7 @@ func OrderEvent(bk string) string {
 func TokenValidationEvent(bk string) string {
 	return "tokenValidationEvent_" + bk
 }
+
+func CancelOrderEvent(bk string) string {
+	return "cancelOrderEvent_" + bk
+}

@@ -29,6 +29,10 @@ type TokenValidatedResponse struct {
 	Validated bool `json:"validated"`
 }
 
+type CancelOrderRespoonse struct {
+	Status bool `json:"status"`
+}
+
 func (o *OrderController) SendOrder(ctx *gin.Context) {
 	var wg sync.WaitGroup
 	var order model.Order
@@ -127,4 +131,45 @@ func (o *OrderController) SendVerifyToken(ctx *gin.Context) {
 
 	ee.Emit(events.TokenValidationEvent(bk), response)
 	ctx.JSON(http.StatusOK, response)
+}
+
+func (o *OrderController) CancelOrder(ctx *gin.Context) {
+	var wg sync.WaitGroup
+	var ok bool
+	bk := ctx.Query("businessKey")
+	if bk == "" {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "businessKey is required"})
+		return
+	}
+
+	code, err := utils.UnlockMessage("Message_cancelOrder", bk)
+	utils.GuardAgainstBadRequest(err, code, ctx)
+
+	wg.Add(1)
+	go ee.Once(events.CancelOrderEvent(bk), func(response CancelOrderRespoonse) {
+		ok = response.Status
+		wg.Done()
+	})
+	wg.Wait()
+	if ok {
+		ctx.JSON(http.StatusOK, gin.H{"message": "Order cancelled"})
+		return
+	}
+	ctx.JSON(http.StatusBadRequest, gin.H{"error": "Order not cancelled"})
+}
+
+func (o *OrderController) WaitCancelOrder(ctx *gin.Context) {
+
+	bk := ctx.Request.Header.Get("businessKey")
+	if bk == "" {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "businessKey is required"})
+		return
+	}
+
+	var response CancelOrderRespoonse
+	err := ctx.ShouldBindJSON(&response)
+	utils.GuradAgainstError(err, ctx)
+
+	ee.Emit(events.CancelOrderEvent(bk), response)
+	ctx.JSON(http.StatusOK, gin.H{"message": "Order cancelled"})
 }

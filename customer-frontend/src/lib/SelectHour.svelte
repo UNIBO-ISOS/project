@@ -25,9 +25,9 @@
     const hours = [...hourRange(12, 14, 0.25), ...hourRange(19, 21, 0.25)];
 </script>
 
-<div>
+<div style="flex: 1">
     <h2>Seleziona l'orario di consegna</h2>
-    <Select bind:value={hour}>
+    <Select variant="outlined" bind:value={hour} style="width: 100%">
         {#each hours as hour}
             <Option value={hour}>{hour}</Option>
         {/each}

@@ -41,6 +41,8 @@ func main() {
 		orders.POST("/wait", orderController.WaitForSendOrder)
 		orders.POST("/sendToken", orderController.SendToken)
 		orders.POST("/verifyToken", orderController.SendVerifyToken)
+		orders.GET("/cancel", orderController.CancelOrder)
+		orders.POST("/waitCancel", orderController.WaitCancelOrder)
 	}
 
 	router.Run(":3001")
