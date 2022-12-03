@@ -1,6 +1,7 @@
 <script>
   import CartSummary from "./lib/CartSummary.svelte";
   import SelectCity from "./lib/SelectCity.svelte";
+  import SelectHour from "./lib/SelectHour.svelte";
   import SelectMenu from "./lib/SelectMenu.svelte";
   import SelectRestaurant from "./lib/SelectRestaurant.svelte";
 
@@ -10,6 +11,12 @@
 
   let restaurant;
   $: isRestaurantSelected = restaurant != undefined;
+
+  let hour;
+  $: isHourSelected = hour != undefined;
+
+  $: firstCondition = isHourSelected && isCitySelected;
+  $: console.log(firstCondition);
 
   let cart;
   $: isCartSelected = cart != undefined && cart.length > 0;
@@ -24,11 +31,13 @@
     <h1>Benvenuto su ACMEat</h1>
     <div style="display: flex;">
       <div style="flex: 3">
-        {#if !isCitySelected}
+        {#if !isHourSelected || !isCitySelected}
           <SelectCity bind:city />
+          <SelectHour bind:hour />
         {/if}
 
-        {#if isCitySelected}
+        <!-- {#if isHourSelected} -->
+        {#if isHourSelected && isCitySelected}
           <SelectRestaurant bind:restaurant {city} />
         {/if}
 
@@ -39,7 +48,7 @@
 
       {#if isCartSelected}
         <div style="flex: 1">
-          <CartSummary bind:cart />
+          <CartSummary bind:cart {hour} />
         </div>
       {/if}
     </div>

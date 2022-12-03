@@ -5,7 +5,8 @@ export interface IOrder {
     courierId?: ObjectId;
     restaurantId: ObjectId;
     price: number;
-    menuId: string[];
+    menu: string[];
+    hour: string;
 }
 
 const orderSchema = new Schema<IOrder>({
@@ -13,9 +14,10 @@ const orderSchema = new Schema<IOrder>({
     courierId: { type: Schema.Types.ObjectId, ref: 'couriers', required: false },
     restaurantId: { type: Schema.Types.ObjectId, ref: 'restaurants', required: true },
     price: { type: Number, required: true },
-    menuId: [{
+    menu: [{
         type: String
-    }]
+    }],
+    hour: { type: String, required: true }
 });
 
 export const Order = model<IOrder>('orders', orderSchema, 'orders');

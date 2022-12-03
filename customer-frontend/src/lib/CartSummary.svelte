@@ -6,6 +6,7 @@
     import TextField from "@smui/textfield";
     import axios from "axios";
     export let cart;
+    export let hour;
 
     const handleClick = (menu) => {
         cart = cart.filter((m) => m._id !== menu._id);
@@ -38,12 +39,14 @@
     const handlePayment = async () => {
         localStorage.setItem("price", finalPrice);
         try {
-            const response = await axios.post(
+            console.log(cart.map((m) => m._id));
+            await axios.post(
                 "http://localhost:3001/orders/",
                 {
                     restaurantId: cart[0].restaurantId,
                     price: finalPrice,
                     menu: cart.map((m) => m._id),
+                    hour,
                 },
                 {
                     params: {
@@ -79,7 +82,7 @@
             snackBarText = "Errore nell'invio del token";
         } finally {
             openDialog = false;
-            console.log('end')
+            console.log("end");
             snackBar.open();
         }
     };

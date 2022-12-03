@@ -3,6 +3,7 @@
 
     export let restaurant;
     export let cart = [];
+    console.log(restaurant)
 
     const handleAddToCart = (item) => {
         if (cart.length > 0 && cart[0].restaurantId !== restaurant._id) {
