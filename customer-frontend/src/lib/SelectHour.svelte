@@ -22,14 +22,31 @@
         return range(start, end, step).map(toHour);
     };
 
-    const hours = [...hourRange(12, 14, 0.25), ...hourRange(19, 21, 0.25)];
+    const currentHour = new Date().getHours();
+
+    // dev only
+    const lunch = 12
+    // const lunch = Math.max(12, currentHour);
+    
+    // dev only
+    const dinner = 19
+    // const dinner = Math.max(19, currentHour);
+
+    const hours = [
+        ...hourRange(lunch, 14, 0.25),
+        ...hourRange(dinner, 21, 0.25),
+    ];
 </script>
 
 <div style="flex: 1">
     <h2>Seleziona l'orario di consegna</h2>
-    <Select variant="outlined" bind:value={hour} style="width: 100%">
-        {#each hours as hour}
-            <Option value={hour}>{hour}</Option>
-        {/each}
-    </Select>
+    {#if hours.length <= 0}
+    <div> Il servizio non è più attivo per oggi. </div>
+    {:else}
+        <Select variant="outlined" bind:value={hour} style="width: 100%">
+            {#each hours as hour}
+                <Option value={hour}>{hour}</Option>
+            {/each}
+        </Select>
+    {/if}
 </div>

@@ -7,6 +7,7 @@ export interface IOrder {
     price: number;
     menu: string[];
     hour: string;
+    address: string;
 }
 
 const orderSchema = new Schema<IOrder>({
@@ -17,7 +18,8 @@ const orderSchema = new Schema<IOrder>({
     menu: [{
         type: String
     }],
-    hour: { type: String, required: true }
+    hour: { type: String, required: true },
+    address: { type: String, required: true }
 });
 
 export const Order = model<IOrder>('orders', orderSchema, 'orders');

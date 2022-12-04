@@ -7,6 +7,7 @@
     import axios from "axios";
     export let cart;
     export let hour;
+    export let address;
     export let orderEmitted;
 
     const handleClick = (menu) => {
@@ -48,6 +49,7 @@
                     price: finalPrice,
                     menu: cart.map((m) => m._id),
                     hour,
+                    address
                 },
                 {
                     params: {

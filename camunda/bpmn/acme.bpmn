@@ -257,49 +257,7 @@ execution.setVariable("courier-"+courier, price)
       <bpmn:outgoing>Flow_1f5djwr</bpmn:outgoing>
       <bpmn:messageEventDefinition id="MessageEventDefinition_0se7yf1" messageRef="Message_257ujhf" />
     </bpmn:intermediateCatchEvent>
-    <bpmn:endEvent id="Event_0br0iw4">
-      <bpmn:incoming>Flow_0vwuhmv</bpmn:incoming>
-      <bpmn:terminateEventDefinition id="TerminateEventDefinition_10ajs42" />
-    </bpmn:endEvent>
-    <bpmn:intermediateThrowEvent id="Event_1aogqfr" name="Send cancel successful">
-      <bpmn:incoming>Flow_1utouju</bpmn:incoming>
-      <bpmn:outgoing>Flow_0vwuhmv</bpmn:outgoing>
-      <bpmn:messageEventDefinition id="MessageEventDefinition_1grewjv" camunda:type="external" camunda:topic="send-cancel-successful" />
-    </bpmn:intermediateThrowEvent>
-    <bpmn:endEvent id="Event_17bliso">
-      <bpmn:incoming>Flow_1xke52q</bpmn:incoming>
-    </bpmn:endEvent>
-    <bpmn:intermediateThrowEvent id="Event_147uo8p" name="Send cancel denied">
-      <bpmn:incoming>Flow_10ghem2</bpmn:incoming>
-      <bpmn:outgoing>Flow_1xke52q</bpmn:outgoing>
-      <bpmn:messageEventDefinition id="MessageEventDefinition_033knne" camunda:type="external" camunda:topic="send-cancel-denied" />
-    </bpmn:intermediateThrowEvent>
-    <bpmn:exclusiveGateway id="Gateway_1ea42bi">
-      <bpmn:incoming>Flow_1kgweln</bpmn:incoming>
-      <bpmn:outgoing>Flow_1utouju</bpmn:outgoing>
-      <bpmn:outgoing>Flow_10ghem2</bpmn:outgoing>
-    </bpmn:exclusiveGateway>
-    <bpmn:serviceTask id="Activity_0aw8che" name="Verify cancel conditions" camunda:type="external" camunda:topic="verify-cancel-condition">
-      <bpmn:incoming>Flow_1vxb8jd</bpmn:incoming>
-      <bpmn:outgoing>Flow_1kgweln</bpmn:outgoing>
-    </bpmn:serviceTask>
-    <bpmn:intermediateCatchEvent id="Event_1ekmjxx" name="Cancel order">
-      <bpmn:incoming>Flow_1ygcahq</bpmn:incoming>
-      <bpmn:outgoing>Flow_1vxb8jd</bpmn:outgoing>
-      <bpmn:messageEventDefinition id="MessageEventDefinition_1oklio1" messageRef="Message_13516lj" />
-    </bpmn:intermediateCatchEvent>
     <bpmn:sequenceFlow id="Flow_19rzu2j" sourceRef="Gateway_1uzrfoj" targetRef="Event_005tosp" />
-    <bpmn:sequenceFlow id="Flow_1ygcahq" sourceRef="Gateway_1uzrfoj" targetRef="Event_1ekmjxx" />
-    <bpmn:sequenceFlow id="Flow_0vwuhmv" sourceRef="Event_1aogqfr" targetRef="Event_0br0iw4" />
-    <bpmn:sequenceFlow id="Flow_1utouju" name="Cancel&#10;successful" sourceRef="Gateway_1ea42bi" targetRef="Event_1aogqfr">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${cancel}</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_1xke52q" sourceRef="Event_147uo8p" targetRef="Event_17bliso" />
-    <bpmn:sequenceFlow id="Flow_10ghem2" name="Cancel denied" sourceRef="Gateway_1ea42bi" targetRef="Event_147uo8p">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${!cancel}</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_1kgweln" sourceRef="Activity_0aw8che" targetRef="Gateway_1ea42bi" />
-    <bpmn:sequenceFlow id="Flow_1vxb8jd" sourceRef="Event_1ekmjxx" targetRef="Activity_0aw8che" />
     <bpmn:sequenceFlow id="Flow_1mc1jm4" sourceRef="Event_0pui1q8" targetRef="Gateway_1uzrfoj" />
     <bpmn:sequenceFlow id="Flow_1f5djwr" sourceRef="Event_005tosp" targetRef="Activity_03hemx1" />
     <bpmn:sequenceFlow id="Flow_1r1274t" sourceRef="Activity_03hemx1" targetRef="Event_1ybyjsl" />
@@ -307,6 +265,46 @@ execution.setVariable("courier-"+courier, price)
       <bpmn:incoming>Flow_1f5djwr</bpmn:incoming>
       <bpmn:outgoing>Flow_1r1274t</bpmn:outgoing>
     </bpmn:serviceTask>
+    <bpmn:intermediateCatchEvent id="Event_1ekmjxx" name="Cancel order">
+      <bpmn:incoming>Flow_1ygcahq</bpmn:incoming>
+      <bpmn:incoming>Flow_0s2cjgn</bpmn:incoming>
+      <bpmn:outgoing>Flow_1vxb8jd</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_1oklio1" messageRef="Message_13516lj" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:sequenceFlow id="Flow_1ygcahq" sourceRef="Gateway_1uzrfoj" targetRef="Event_1ekmjxx" />
+    <bpmn:serviceTask id="Activity_0aw8che" name="Verify cancel conditions" camunda:type="external" camunda:topic="verify-cancel-condition">
+      <bpmn:incoming>Flow_1vxb8jd</bpmn:incoming>
+      <bpmn:outgoing>Flow_1kgweln</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_1vxb8jd" sourceRef="Event_1ekmjxx" targetRef="Activity_0aw8che" />
+    <bpmn:exclusiveGateway id="Gateway_1ea42bi">
+      <bpmn:incoming>Flow_1kgweln</bpmn:incoming>
+      <bpmn:outgoing>Flow_10ghem2</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1utouju</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_1kgweln" sourceRef="Activity_0aw8che" targetRef="Gateway_1ea42bi" />
+    <bpmn:intermediateThrowEvent id="Event_147uo8p" name="Send cancel denied">
+      <bpmn:incoming>Flow_10ghem2</bpmn:incoming>
+      <bpmn:outgoing>Flow_0s2cjgn</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_033knne" camunda:type="external" camunda:topic="send-cancel-denied" />
+    </bpmn:intermediateThrowEvent>
+    <bpmn:sequenceFlow id="Flow_10ghem2" name="Cancel denied" sourceRef="Gateway_1ea42bi" targetRef="Event_147uo8p">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${!cancel}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:intermediateThrowEvent id="Event_1aogqfr" name="Send cancel successful">
+      <bpmn:incoming>Flow_1utouju</bpmn:incoming>
+      <bpmn:outgoing>Flow_0vwuhmv</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_1grewjv" camunda:type="external" camunda:topic="send-cancel-successful" />
+    </bpmn:intermediateThrowEvent>
+    <bpmn:sequenceFlow id="Flow_1utouju" name="Cancel&#10;successful" sourceRef="Gateway_1ea42bi" targetRef="Event_1aogqfr">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${cancel}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:endEvent id="Event_0br0iw4">
+      <bpmn:incoming>Flow_0vwuhmv</bpmn:incoming>
+      <bpmn:terminateEventDefinition id="TerminateEventDefinition_10ajs42" />
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_0vwuhmv" sourceRef="Event_1aogqfr" targetRef="Event_0br0iw4" />
+    <bpmn:sequenceFlow id="Flow_0s2cjgn" sourceRef="Event_147uo8p" targetRef="Event_1ekmjxx" />
   </bpmn:process>
   <bpmn:message id="Message_06zhww0" name="SuccessfulVerification" />
   <bpmn:message id="Message_0jh2aqm" name="UnsuccessfulTokenVerification" />
@@ -340,12 +338,8 @@ execution.setVariable("courier-"+courier, price)
         <di:waypoint x="3655" y="180" />
         <di:waypoint x="3772" y="180" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="3619" y="163" width="71" height="14" />
+          <dc:Bounds x="3654" y="163" width="71" height="14" />
         </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1xke52q_di" bpmnElement="Flow_1xke52q">
-        <di:waypoint x="3808" y="180" />
-        <di:waypoint x="3892" y="180" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1utouju_di" bpmnElement="Flow_1utouju">
         <di:waypoint x="3655" y="265" />
@@ -369,6 +363,15 @@ execution.setVariable("courier-"+courier, price)
         <di:waypoint x="3295" y="380" />
         <di:waypoint x="3392" y="380" />
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0ldw01c_di" bpmnElement="Flow_0ldw01c">
+        <di:waypoint x="2120" y="485" />
+        <di:waypoint x="2120" y="410" />
+        <di:waypoint x="2212" y="410" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_0uszjd4" bpmnElement="Flow_18v13h0">
+        <di:waypoint x="2248" y="410" />
+        <di:waypoint x="2332" y="410" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1wtyh24_di" bpmnElement="Flow_1wtyh24">
         <di:waypoint x="1488" y="280" />
         <di:waypoint x="1572" y="280" />
@@ -381,6 +384,10 @@ execution.setVariable("courier-"+courier, price)
         <di:waypoint x="2145" y="510" />
         <di:waypoint x="2460" y="510" />
         <di:waypoint x="2460" y="335" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0yl98fw_di" bpmnElement="Flow_0yl98fw">
+        <di:waypoint x="2030" y="510" />
+        <di:waypoint x="2095" y="510" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1iilpq6_di" bpmnElement="Flow_1iilpq6">
         <di:waypoint x="2588" y="310" />
@@ -395,7 +402,7 @@ execution.setVariable("courier-"+courier, price)
         <di:waypoint x="2880" y="220" />
         <di:waypoint x="3022" y="220" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="2878" y="203.00000000000006" width="63" height="14" />
+          <dc:Bounds x="2878" y="203" width="63" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1gkr8ko_di" bpmnElement="Flow_1gkr8ko">
@@ -502,35 +509,12 @@ execution.setVariable("courier-"+courier, price)
         <di:waypoint x="1328" y="510" />
         <di:waypoint x="1370" y="510" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0yl98fw_di" bpmnElement="Flow_0yl98fw">
-        <di:waypoint x="2030" y="510" />
-        <di:waypoint x="2095" y="510" />
+      <bpmndi:BPMNEdge id="Flow_0s2cjgn_di" bpmnElement="Flow_0s2cjgn">
+        <di:waypoint x="3790" y="162" />
+        <di:waypoint x="3790" y="110" />
+        <di:waypoint x="3410" y="110" />
+        <di:waypoint x="3410" y="222" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0ldw01c_di" bpmnElement="Flow_0ldw01c">
-        <di:waypoint x="2120" y="485" />
-        <di:waypoint x="2120" y="410" />
-        <di:waypoint x="2212" y="410" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="BPMNEdge_0uszjd4" bpmnElement="Flow_18v13h0">
-        <di:waypoint x="2248" y="410" />
-        <di:waypoint x="2332" y="410" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="BPMNShape_1b4hz41" bpmnElement="Activity_0vh7h3k">
-        <dc:Bounds x="1930" y="470" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_0jg6c89_di" bpmnElement="Gateway_0jg6c89" isMarkerVisible="true">
-        <dc:Bounds x="2095" y="485" width="50" height="50" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_0axtla1" bpmnElement="Event_144cllc">
-        <dc:Bounds x="2332" y="392" width="36" height="36" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_115fgzh" bpmnElement="Event_0owfjuv">
-        <dc:Bounds x="2212" y="392" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="2188" y="435" width="87" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_03ukvs6" bpmnElement="Activity_0aclbrs" isExpanded="true">
         <dc:Bounds x="1370" y="400" width="480" height="220" />
         <bpmndi:BPMNLabel />
@@ -565,11 +549,11 @@ execution.setVariable("courier-"+courier, price)
         <dc:Bounds x="1610" y="520" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_1vpzsmb" bpmnElement="Event_0lpv7rd">
-        <dc:Bounds x="1782" y="422" width="36" height="36" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_1lfnm4t" bpmnElement="Event_0uk0xh2">
         <dc:Bounds x="1782" y="542" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_1vpzsmb" bpmnElement="Event_0lpv7rd">
+        <dc:Bounds x="1782" y="422" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_0vhaor7" bpmnElement="Event_11pa5k7">
         <dc:Bounds x="1672" y="502" width="36" height="36" />
@@ -612,6 +596,10 @@ execution.setVariable("courier-"+courier, price)
         <bpmndi:BPMNLabel>
           <dc:Bounds x="1443" y="125" width="54" height="27" />
         </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_1b4hz41" bpmnElement="Activity_0vh7h3k">
+        <dc:Bounds x="1930" y="470" width="100" height="80" />
+        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_1vz7uvb" bpmnElement="Activity_1uu51bv">
         <dc:Bounds x="980" y="270" width="100" height="80" />
@@ -703,6 +691,9 @@ execution.setVariable("courier-"+courier, price)
           <dc:Bounds x="2649" y="335" width="67" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0jg6c89_di" bpmnElement="Gateway_0jg6c89" isMarkerVisible="true">
+        <dc:Bounds x="2095" y="485" width="50" height="50" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0omseu9_di" bpmnElement="Event_1bqnpnq">
         <dc:Bounds x="1692" y="262" width="36" height="36" />
       </bpmndi:BPMNShape>
@@ -710,6 +701,15 @@ execution.setVariable("courier-"+courier, price)
         <dc:Bounds x="1572" y="262" width="36" height="36" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="1548" y="305" width="87" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0axtla1" bpmnElement="Event_144cllc">
+        <dc:Bounds x="2332" y="392" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_115fgzh" bpmnElement="Event_0owfjuv">
+        <dc:Bounds x="2212" y="392" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2188" y="435" width="87" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0tbgnfp_di" bpmnElement="Event_0rsk3qa">
@@ -735,9 +735,6 @@ execution.setVariable("courier-"+courier, price)
         <bpmndi:BPMNLabel>
           <dc:Bounds x="3761" y="335" width="61" height="27" />
         </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_17bliso_di" bpmnElement="Event_17bliso">
-        <dc:Bounds x="3892" y="162" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_01o8pet_di" bpmnElement="Event_147uo8p">
         <dc:Bounds x="3772" y="162" width="36" height="36" />

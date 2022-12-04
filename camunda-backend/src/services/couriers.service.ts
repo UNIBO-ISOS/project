@@ -1,24 +1,26 @@
 import axios from 'axios';
 import { HandlerArgs, Variables } from 'camunda-external-task-client-js';
 
-interface PriceProposal {
-    courierId: string;
-    price: number;
-}
-
 const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
 
 export const SendCourierRequest = async ({ task, taskService }: HandlerArgs) => {
     try {
         console.log('SendCourierRequest');
         const courierId = task.variables.get('courierId');
+        const hour = task.variables.get('hour');
+        const customerAddress = task.variables.get('order').address;
 
         console.log(`Sent request to courier ${courierId}`);
 
         await taskService.complete(task, task.variables)
         await axios.get("http://courier-service:3000/api/v1/availability/" + courierId, {
             params: {
-                bk: task.businessKey
+                bk: task.businessKey,
+                hour,
+                // indirizzo del cliente
+                customerAddress
+                // indirizzo del locale
+                // restaurant: ''
             }
         })
     } catch (err) {

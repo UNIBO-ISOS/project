@@ -1,23 +1,20 @@
 <script>
   import CancelOrder from "../lib/CancelOrder.svelte";
   import CartSummary from "../lib/CartSummary.svelte";
-  import SelectCity from "../lib/SelectCity.svelte";
-  import SelectHour from "../lib/SelectHour.svelte";
   import SelectMenu from "../lib/SelectMenu.svelte";
   import SelectRestaurant from "../lib/SelectRestaurant.svelte";
+  import StartPage from "./StartPage.svelte";
 
   // Control the flow of the app
   let city;
-  $: isCitySelected = city != undefined;
+  
+  let hour;  
+  
+  let address = '';
+  let nextStep = false;
 
   let restaurant;
   $: isRestaurantSelected = restaurant != undefined;
-
-  let hour;
-  $: isHourSelected = hour != undefined;
-
-  $: firstCondition = isHourSelected && isCitySelected;
-  $: console.log(firstCondition);
 
   let cart;
   $: isCartSelected = cart != undefined && cart.length > 0;
@@ -31,13 +28,12 @@
 
 <div>
   {#if !orderEmitted}
-    <div style="display: flex; gap: 10px; justify-content: space-around;">
-      {#if !isHourSelected || !isCitySelected}
-        <SelectCity bind:city />
-        <SelectHour bind:hour />
-      {/if}
+    {#if !nextStep}
+      <StartPage bind:city bind:address bind:hour bind:nextStep />
+    {/if}
 
-      {#if isHourSelected && isCitySelected}
+    <div style="display: flex; gap: 10px; justify-content: space-around;">
+      {#if nextStep}
         <div style="flex: 3">
           <SelectRestaurant bind:restaurant {city} />
 
@@ -49,7 +45,7 @@
 
       {#if isCartSelected}
         <div style="flex: 1">
-          <CartSummary bind:orderEmitted bind:cart {hour} />
+          <CartSummary bind:orderEmitted bind:cart {hour} {address} />
         </div>
       {/if}
     </div>
