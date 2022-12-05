@@ -111,7 +111,7 @@ class BankWrapper {
      * @param to_user the user to refund
      * @returns 
      */
-    refundTransaction(args: any) {
+    refundTransaction(args: any) : Promise<any> {
         return new Promise((resolve, reject) => {
             this.client.then(async (client) => {
                 const sid = await this.sid

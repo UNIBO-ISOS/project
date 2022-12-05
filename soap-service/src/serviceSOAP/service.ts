@@ -83,8 +83,16 @@ const service = {
                 return new Promise(async (resolve, reject) => {
                     console.log(`Received request to refund token with args ${args}`)
                     try {
-                        //const bank = new BankWrapper()
-                        const response = myBank.refundTransaction(args)
+                        const token = args.bk
+                        delete args.bk
+                        const response = await myBank.refundTransaction(args)
+                        const verified = response[0].status.$value
+                        // let body = { 
+                        //     "messageName": verified ? process.env.CAMUNDA_SUCCESSFUL_TOKEN_VERIFICATION! : process.env.CAMUNDA_UNSUCCESSFUL_TOKEN_VERIFICATION!,
+                        //     "businessKey": token,
+                        //     "processVariables": {}
+                        // } 
+                        // await moveToken(body)
                         resolve(response)
                     } catch(err) {
                         reject(err)
