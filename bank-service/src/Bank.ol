@@ -139,7 +139,8 @@ main{
                 )(dbBalanceResponse);
 
                 if (#dbBalanceResponse.row) {
-                    getBalance_response.balance = dbBalanceResponse.row.balance
+                    getBalance_response.balance = dbBalanceResponse.row.balance;
+                    println@Console("username: " + username + " requested balance.")()
                 }
             }
         } ]

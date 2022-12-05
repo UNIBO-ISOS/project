@@ -17,9 +17,18 @@ const sendSoap = (body) => {
 					xmlhttp.responseText,
 					"text/html"
 				);
+				const response_message =
+					response.getElementsByTagName("message");
+				const login_status = response_message[0].outerText;
+				if (login_status != "Logged") {
+					$("#login_error").modal("show");
+					return;
+				}
+
 				const token = response.getElementsByTagName("sid");
 				const sid_token = token[0].outerText;
 				localStorage.setItem("sid", sid_token);
+
 				//alert(token_text);
 				window.location.href = "/pay.html";
 				//const token =
