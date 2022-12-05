@@ -171,7 +171,7 @@ main{
                     }
                     )(sqlResponse);
                     if (#sqlResponse.row == 1) {
-                        new_balance = sqlResponse.row.balance - newTransaction_response.amount;
+                        new_balance = sqlResponse.row.balance - newTransaction_request.amount;
 
                         update@Database(
                             "UPDATE Users SET balance=:balance WHERE username=:username" {
@@ -183,15 +183,15 @@ main{
 
                     query@Database(
                         "SELECT balance FROM Users WHERE username=:username" {
-                            .username = newTransaction_response.to_user
+                            .username = newTransaction_request.to_user
                         }
                     )(sqlResponse);
                     if (#sqlResponse.row == 1) {
-                        new_balance = sqlResponse.row.balance + newTransaction_response.amount;
+                        new_balance = sqlResponse.row.balance + newTransaction_request.amount;
 
                         update@Database(
                             "UPDATE Users SET balance=:balance WHERE username=:username" {
-                                .username = newTransaction_response.to_user,
+                                .username = newTransaction_request.to_user,
                                 .balance = new_balance
                             }
                         )(dbresponse.status)
@@ -290,9 +290,9 @@ main{
                     }
 
                     if(refundTransaction_response.status){
-                        println@Console("Succeded to refund transaction with Token: " + uuid)()
+                        println@Console("Succeded to refund transaction with Token: " + refundTransaction_request.token)()
                     } else {
-                        println@Console("Failed to refund transaction with Token: " + uuid)()
+                        println@Console("Failed to refund transaction with Token: " + refundTransaction_request.token)()
                     }
                 }
             }
@@ -326,9 +326,9 @@ main{
                 }
 
                 if(verifyTransaction_response.status){
-                    println@Console("Transaction Token: " + uuid + "\tverified.")()
+                    println@Console("Transaction Token: " + verifyTransaction_request.token + "\tverified.")()
                 } else {
-                    println@Console("Transaction Token: " + uuid + "\tNOT verified.")()
+                    println@Console("Transaction Token: " + verifyTransaction_request.token + "\tNOT verified.")()
                 }
 
             }
