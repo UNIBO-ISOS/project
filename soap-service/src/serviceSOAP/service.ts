@@ -110,6 +110,8 @@ const service = {
                     } catch(err) {
                         reject(err)
                     }
+                }).catch((err: any) => {
+                    console.log(err)
                 })
             }
         }
