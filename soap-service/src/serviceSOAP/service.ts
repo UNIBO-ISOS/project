@@ -100,6 +100,17 @@ const service = {
                 }).catch((err: any) => {
                     console.log(err)
                 })
+            },
+            getBalance: ( args: any ) => {
+                return new Promise(async (resolve, reject) => {
+                    console.log(`Received request to getBalance ${args}`)
+                    try {
+                        const response = await myBank.getBalance(args)
+                        resolve(response)
+                    } catch(err) {
+                        reject(err)
+                    }
+                })
             }
         }
     }

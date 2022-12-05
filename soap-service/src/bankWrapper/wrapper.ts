@@ -123,7 +123,19 @@ class BankWrapper {
                 reject(err)
             })
         })
-    } 
+    }
+    
+    getBalance(args: any) : Promise<any> {
+        return new Promise((resolve, reject) => {
+            this.client.then(async (client) => {
+                const response = await client.getBalanceAsync( args )
+                resolve(response)
+            })
+            .catch((err) => {
+                reject(err)
+            })
+        })
+    }
 
 }
 
