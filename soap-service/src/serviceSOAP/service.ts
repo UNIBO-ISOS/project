@@ -87,12 +87,12 @@ const service = {
                         delete args.bk
                         const response = await myBank.refundTransaction(args)
                         const verified = response[0].status.$value
-                        // let body = { 
-                        //     "messageName": verified ? process.env.CAMUNDA_SUCCESSFUL_TOKEN_VERIFICATION! : process.env.CAMUNDA_UNSUCCESSFUL_TOKEN_VERIFICATION!,
-                        //     "businessKey": token,
-                        //     "processVariables": {}
-                        // } 
-                        // await moveToken(body)
+                        let body = { 
+                            "messageName": verified ? process.env.CAMUNDA_SUCCESSFUL_REFUND! : process.env.CAMUNDA_UNSUCCESSFUL_REFUND!,
+                             "businessKey": token,
+                             "processVariables": {}
+                         } 
+                        await moveToken(body)
                         resolve(response)
                     } catch(err) {
                         reject(err)
