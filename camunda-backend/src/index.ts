@@ -9,7 +9,7 @@ import { SendSuccessfulVerification, SendUnsuccessfulVerification, verifyToken }
 import { RetreiveCities, ReturnCities } from './services/cities.service';
 import { SelectCourier, SendCourierRequest } from './services/couriers.service';
 import { AskCouriersInRange } from './services/gis.service';
-import { CreateNewOrder, NotifyOrderCreated, NotifyOrderNotAvailable, SendOrderCancelled, SendOrderNotCancelled, VerifyCancelCondition } from './services/order.service';
+import { CreateNewOrder, impossibleToRefund, NotifyOrderCreated, NotifyOrderNotAvailable, RefundUser, SendOrderCancelled, SendOrderNotCancelled, VerifyCancelCondition } from './services/order.service';
 import { AskRestaurantAvailability, RetreiveRestaurants, ReturnRestaurants, SendRestaurantNotUpdated, SendRestaurantUpdated, UpdateRestaurantInfo, VerifyUpdateConditions } from './services/restaurants.service';
 
 // configuration for the Client:
@@ -48,8 +48,9 @@ client.subscribe('send-unsuccessful-verification', SendUnsuccessfulVerification)
 client.subscribe('send-successful-verification', SendSuccessfulVerification)
 client.subscribe('verify-cancel-condition', VerifyCancelCondition)
 client.subscribe('send-cancel-denied', SendOrderNotCancelled)
-//client.subscribe('send-cancel-successful', SendOrderCancelled)
-client.subscribe('send-refund-and-notify-user', SendOrderCancelled)
+client.subscribe('refund-user', RefundUser)
+client.subscribe('send-cancel-successful', SendOrderCancelled)
+client.subscribe('send-refund-unsuccessful', impossibleToRefund)
 
 // GIS topics
 client.subscribe('gis-askCouriers', AskCouriersInRange)

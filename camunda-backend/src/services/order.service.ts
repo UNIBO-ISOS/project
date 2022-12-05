@@ -92,22 +92,37 @@ export const SendOrderCancelled = async ({ task, taskService }: HandlerArgs) => 
     }
     // send-order-created
     await axios.post('http://customer-server:3001/orders/waitCancel', body, { headers: { businessKey: bk } });
-
-    // send refund
-    const token = task.variables.get('token')
-    const bodySoap = `
-    <?xml version="1.0" encoding="utf-8"?>
-    <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
-      <soap:Body>
-        <refundTransaction xmlns="acme.bank.com.xsd">
-          <token>${token}</token>
-        </refundTransaction>
-      </soap:Body>
-    </soap:Envelope>
-    `
-    await axios.post('http://soap-service:6666/wsdl', bodySoap, { headers: { 'Content-type': 'text/xml' } })
-
     await taskService.complete(task)
+}
+
+export const impossibleToRefund = async ({ task, taskService }: HandlerArgs) => {
+    const bk = task.businessKey;
+
+    /*const body = {
+        status: false
+    }*/
+    // send-order-created
+    //todo: notify user
+    await taskService.complete(task)
+}
+
+export const RefundUser = async ({ task, taskService}: HandlerArgs) => {
+    const bk = task.businessKey;
+    const token = task.variables.get('token')
+
+    const bodySoap = `
+        <?xml version="1.0" encoding="utf-8"?>
+        <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+          <soap:Body>
+            <refundTransaction xmlns="acme.bank.com.xsd">
+              <token>${token}</token>
+              <bk>${bk}</bk>
+            </refundTransaction>
+          </soap:Body>
+        </soap:Envelope>
+    `
+    await taskService.complete(task)
+    await axios.post('http://soap-service:6666/wsdl', bodySoap, { headers: { 'Content-type': 'text/xml' } })
 }
 
 export const SendOrderNotCancelled = async ({ task, taskService }: HandlerArgs) => {
