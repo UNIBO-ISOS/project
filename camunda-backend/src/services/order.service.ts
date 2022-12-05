@@ -92,6 +92,21 @@ export const SendOrderCancelled = async ({ task, taskService }: HandlerArgs) => 
     }
     // send-order-created
     await axios.post('http://customer-server:3001/orders/waitCancel', body, { headers: { businessKey: bk } });
+
+    // send refund
+    const token = task.variables.get('token')
+    const bodySoap = `
+    <?xml version="1.0" encoding="utf-8"?>
+    <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+      <soap:Body>
+        <refundTransaction xmlns="acme.bank.com.xsd">
+          <token>${token}</token>
+        </refundTransaction>
+      </soap:Body>
+    </soap:Envelope>
+    `
+    await axios.post('http://soap-service:6666/wsdl', bodySoap, { headers: { 'Content-type': 'text/xml' } })
+
     await taskService.complete(task)
 }
 

@@ -48,7 +48,8 @@ client.subscribe('send-unsuccessful-verification', SendUnsuccessfulVerification)
 client.subscribe('send-successful-verification', SendSuccessfulVerification)
 client.subscribe('verify-cancel-condition', VerifyCancelCondition)
 client.subscribe('send-cancel-denied', SendOrderNotCancelled)
-client.subscribe('send-cancel-successful', SendOrderCancelled)
+//client.subscribe('send-cancel-successful', SendOrderCancelled)
+client.subscribe('send-refund-and-notify-user', SendOrderCancelled)
 
 // GIS topics
 client.subscribe('gis-askCouriers', AskCouriersInRange)
