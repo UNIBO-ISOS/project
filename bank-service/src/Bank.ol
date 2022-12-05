@@ -17,6 +17,7 @@ inputPort BankService {
 cset {
     sid: 
         Message.sid
+        GetBalanceRequest.sid
         NewTransactionRequest.sid
         RefundTransactionRequest.sid
         VerifyTransactionRequest.sid
@@ -129,14 +130,25 @@ main{
             -------------
           #################
         */
+        [ getBalance(getBalance_request)(getBalance_response){
+            synchronized(lock){
+                query@Database(
+                    "SELECT balance FROM Users WHERE username=:username" {
+                        .username = username
+                    }
+                )(dbBalanceResponse);
+
+                if (#dbBalanceResponse.row) {
+                    getBalance_response.balance = dbBalanceResponse.row.balance
+                }
+            }
+        } ]
         
         //  AGGIUNGERE CONTROLLO SU BILANCIO NON SUFFICIENTE
         [ newTransaction(newTransaction_request)(newTransaction_response) {
             uuid_exists = true
             enough_balance = false
             synchronized(lock){
-
-
                 while(uuid_exists) {
                     getRandomUUID@StringUtils()(uuid)
                     println@Console("Checking new Transaction Token: " + uuid + " - availability...")()

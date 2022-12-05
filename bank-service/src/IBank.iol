@@ -9,6 +9,10 @@ type Message: void {
     .username?: string
 }
 
+type GetBalanceRequest: void {
+    .sid: string
+}
+
 type NewTransactionRequest: void {
     .sid: string
     .amount: double
@@ -32,11 +36,16 @@ type TransactionResponse: void {
     .status?: bool
 }
 
+type BalanceResponse: void {
+    .balance: double
+}
+
 interface BankInterface {
     RequestResponse:
         login(LoginRequest)(Message),
 
         //  BANK QUERIES
+        getBalance(GetBalanceRequest)(BalanceResponse),
         newTransaction(NewTransactionRequest)(TransactionResponse),
         refundTransaction(RefundTransactionRequest)(TransactionResponse),
         verifyTransaction(VerifyTransactionRequest)(TransactionResponse),

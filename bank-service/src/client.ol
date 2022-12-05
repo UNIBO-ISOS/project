@@ -19,6 +19,8 @@ main{
     login_sid = response.sid;
     Message.sid = response.sid;
     TransactionRequest.sid = response.sid;
+    GetBalanceRequest.sid = response.sid;
+
     
     println@Console(response.message)();
 
@@ -43,9 +45,14 @@ main{
             Message.message = "logout"
         } else {    
             //createTransaction@BankService(Message)(response);
-            TransactionRequest.amount = 14.3;
 
-            TransactionRequest.to_user = "acmeat";
+            
+            getBalance@BankService(GetBalanceRequest)(blblbl);
+            println@Console("balance: " + blblbl.balance)();
+
+            //TransactionRequest.amount = 14.3;
+
+            //TransactionRequest.to_user = "acmeat";
             //newTransaction@BankService(TransactionRequest)(TransactionResponse);
 
             //TransactionRequest.token = "e5701ea8-3083-4af0-9b07-903880dc5bb4";
