@@ -332,8 +332,14 @@ execution.setVariable("courier-"+courier, price)
     <bpmn:sequenceFlow id="Flow_1muurcb" sourceRef="Event_1negf4j" targetRef="Event_13hrk03" />
     <bpmn:intermediateThrowEvent id="Event_13hrk03" name="Notify User">
       <bpmn:incoming>Flow_1muurcb</bpmn:incoming>
+      <bpmn:outgoing>Flow_1p8vvzr</bpmn:outgoing>
       <bpmn:messageEventDefinition id="MessageEventDefinition_1kfbtox" camunda:type="external" camunda:topic="send-refund-unsuccessful" />
     </bpmn:intermediateThrowEvent>
+    <bpmn:endEvent id="Event_058o9us">
+      <bpmn:incoming>Flow_1p8vvzr</bpmn:incoming>
+      <bpmn:terminateEventDefinition id="TerminateEventDefinition_0bz2ru1" />
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1p8vvzr" sourceRef="Event_13hrk03" targetRef="Event_058o9us" />
   </bpmn:process>
   <bpmn:message id="Message_06zhww0" name="SuccessfulVerification" />
   <bpmn:message id="Message_0jh2aqm" name="UnsuccessfulTokenVerification" />
@@ -380,6 +386,9 @@ execution.setVariable("courier-"+courier, price)
         <bpmndi:BPMNLabel>
           <dc:Bounds x="4172" y="435" width="56" height="14" />
         </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_136oa4g_di" bpmnElement="Event_058o9us">
+        <dc:Bounds x="4302" y="392" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_03ukvs6" bpmnElement="Activity_0aclbrs" isExpanded="true">
         <dc:Bounds x="1370" y="400" width="480" height="220" />
@@ -843,6 +852,10 @@ execution.setVariable("courier-"+courier, price)
       <bpmndi:BPMNEdge id="Flow_1muurcb_di" bpmnElement="Flow_1muurcb">
         <di:waypoint x="4098" y="410" />
         <di:waypoint x="4182" y="410" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1p8vvzr_di" bpmnElement="Flow_1p8vvzr">
+        <di:waypoint x="4218" y="410" />
+        <di:waypoint x="4302" y="410" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
