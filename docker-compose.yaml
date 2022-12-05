@@ -73,6 +73,8 @@ services:
     build: ./soap-service
     ports:
       - '6666:6666'
+    depends_on:
+      - bank-service
   bank-service:
     container_name: bank-service
     build: ./bank-service
