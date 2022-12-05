@@ -2,7 +2,10 @@ FROM ruby:3.1.2
 
 # Default directory
 ENV INSTALL_PATH /opt/app
-RUN mkdir -p $INSTALL_PATH
+# removes pid of old application's execution
+#RUN mkdir -p $INSTALL_PATH
+
+RUN rm -f /opt/app/tmp/pids/server.pid
 
 # Install rails
 RUN gem install rails bundler
