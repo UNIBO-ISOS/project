@@ -98,15 +98,16 @@ export const SendOrderCancelled = async ({ task, taskService }: HandlerArgs) => 
 export const impossibleToRefund = async ({ task, taskService }: HandlerArgs) => {
     const bk = task.businessKey;
 
-    /*const body = {
+    const body = {
         status: false
-    }*/
+    }
     // send-order-created
+    await axios.post('http://customer-server:3001/orders/waitCancel', body, { headers: { businessKey: bk } });
     //todo: notify user
     await taskService.complete(task)
 }
 
-export const RefundUser = async ({ task, taskService}: HandlerArgs) => {
+export const RefundUser = async ({ task, taskService }: HandlerArgs) => {
     const bk = task.businessKey;
     const token = task.variables.get('token')
 
