@@ -3,8 +3,6 @@ services:
   camunda-backend:
     container_name: camunda-backend
     build: ./camunda-backend
-    volumes:
-      - ./camunda-backend:/usr/src/app
     depends_on:
       camunda:
         condition: service_healthy
