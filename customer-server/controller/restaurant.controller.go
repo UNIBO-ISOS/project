@@ -5,6 +5,7 @@ import (
 	"customer-server/model"
 	"customer-server/utils"
 	"net/http"
+	"os"
 	"sync"
 
 	"github.com/gin-gonic/gin"
@@ -35,7 +36,8 @@ func (rc RestaurantController) GetRestaurants(ctx *gin.Context) {
 	}
 
 	pv := utils.ProcessVariable{"cityId": {"value": cityId, "type": "String"}}
-	utils.UnlockMessageWithVariables("Message_rcvCity", bk, pv)
+	message := os.Getenv("MESSAGE_RECEIVE_CITIES")
+	utils.UnlockMessageWithVariables(message, bk, pv)
 
 	wg.Add(1)
 	go ee.Once(events.RestaurantEvent(bk), func(data []Restaurant) {

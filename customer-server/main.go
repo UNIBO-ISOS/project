@@ -7,6 +7,7 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/jiyeyuran/go-eventemitter"
+	"github.com/joho/godotenv"
 )
 
 type City = m.City
@@ -15,6 +16,7 @@ type Restaurant = m.Restaurant
 var ee = eventemitter.NewEventEmitter()
 
 func main() {
+	godotenv.Load()
 	router := gin.Default()
 
 	// Enable CORS

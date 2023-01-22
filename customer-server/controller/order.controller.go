@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
 	"sync"
 
 	"github.com/gin-gonic/gin"
@@ -52,7 +53,8 @@ func (o *OrderController) SendOrder(ctx *gin.Context) {
 		"order":      {"value": string(body), "type": "Json"},
 		"restaurant": {"value": order.RestaurantId, "type": "String"},
 	}
-	code, err := utils.UnlockMessageWithVariables("Message_rcvOrder", bk, pv)
+	message := os.Getenv("MESSAGE_RECEIVE_ORDER")
+	code, err := utils.UnlockMessageWithVariables(message, bk, pv)
 	utils.GuardAgainstBadRequest(err, code, ctx)
 
 	var response OrderResponse
@@ -122,7 +124,6 @@ func (o *OrderController) SendToken(ctx *gin.Context) {
 
 func (o *OrderController) SendVerifyToken(ctx *gin.Context) {
 	var response TokenValidatedResponse
-	fmt.Println("abcabc")
 	err := ctx.ShouldBindJSON(&response)
 	utils.GuradAgainstError(err, ctx)
 
@@ -142,7 +143,8 @@ func (o *OrderController) CancelOrder(ctx *gin.Context) {
 		return
 	}
 
-	code, err := utils.UnlockMessage("Message_cancelOrder", bk)
+	message := os.Getenv("MESSAGE_CANGEL_ORDER")
+	code, err := utils.UnlockMessage(message, bk)
 	utils.GuardAgainstBadRequest(err, code, ctx)
 
 	wg.Add(1)

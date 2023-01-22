@@ -6,7 +6,7 @@ WORKDIR /app
 
 COPY . .
 
-RUN go get github.com/gin-gonic/gin
+# RUN go get github.com/gin-gonic/gin
 RUN go build .
 
 EXPOSE 3001

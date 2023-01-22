@@ -5,6 +5,7 @@ import (
 	"customer-server/model"
 	"customer-server/utils"
 	"net/http"
+	"os"
 	"strconv"
 	"sync"
 	"time"
@@ -24,7 +25,8 @@ func (_ *CityController) GetCities(ctx *gin.Context) {
 	utils.GuardAgainstBadRequest(err, code, ctx)
 
 	// Unlock the message
-	code, err = utils.UnlockMessage("Message_askCities", bk)
+	message := os.Getenv("MESSAGE_ASK_CITIES")
+	code, err = utils.UnlockMessage(message, bk)
 	utils.GuardAgainstBadRequest(err, code, ctx)
 
 	// ctx.Request.Header.Add("businessKey", bk)
