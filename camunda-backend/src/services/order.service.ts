@@ -30,7 +30,8 @@ export const NotifyOrderCreated = async ({ task, taskService }: HandlerArgs) => 
         message: 'Order created'
     }
     // send-order-created
-    await axios.post('http://customer-server:3001/orders/wait', body, { headers: { businessKey: bk } });
+    const customerEndpoint = process.env.CUSTOMER_SERVER_URL!
+    await axios.post(`${customerEndpoint}/orders/wait`, body, { headers: { businessKey: bk } });
 
 
 
@@ -46,7 +47,8 @@ export const NotifyOrderNotAvailable = async ({ task, taskService }: HandlerArgs
         message: 'Order could not be created'
     }
     // send-order-created
-    await axios.post('http://customer-server:3001/orders/wait', body, { headers: { businessKey: bk } });
+    const customerEndpoint = process.env.CUSTOMER_SERVER_URL!
+    await axios.post(`${customerEndpoint}:3001/orders/wait`, body, { headers: { businessKey: bk } });
 
 
     await taskService.complete(task)
@@ -91,7 +93,8 @@ export const SendOrderCancelled = async ({ task, taskService }: HandlerArgs) => 
         status: true
     }
     // send-order-created
-    await axios.post('http://customer-server:3001/orders/waitCancel', body, { headers: { businessKey: bk } });
+    const customerEndpoint = process.env.CUSTOMER_SERVER_URL!
+    await axios.post(`${customerEndpoint}/orders/waitCancel`, body, { headers: { businessKey: bk } });
     await taskService.complete(task)
 }
 
@@ -102,7 +105,8 @@ export const impossibleToRefund = async ({ task, taskService }: HandlerArgs) => 
         status: false
     }
     // send-order-created
-    await axios.post('http://customer-server:3001/orders/waitCancel', body, { headers: { businessKey: bk } });
+    const customerEndpoint = process.env.CUSTOMER_SERVER_URL!
+    await axios.post(`${customerEndpoint}/orders/waitCancel`, body, { headers: { businessKey: bk } });
     //todo: notify user
     await taskService.complete(task)
 }
@@ -133,6 +137,8 @@ export const SendOrderNotCancelled = async ({ task, taskService }: HandlerArgs) 
         status: false
     }
     // send-order-created
-    await axios.post('http://customer-server:3001/orders/waitCancel', body, { headers: { businessKey: bk } });
+
+    const customerEndpoint = process.env.CUSTOMER_SERVER_URL!
+    await axios.post(`${customerEndpoint}/orders/waitCancel`, body, { headers: { businessKey: bk } });
     await taskService.complete(task)
 }

@@ -19,7 +19,8 @@ export const ReturnCities = async ({ task, taskService }: HandlerArgs) => {
     console.log(`Cities: ${JSON.stringify(cities)}`);
     const bk = task.businessKey;
 
-    await axios.post('http://customer-server:3001/cities', cities, { headers: { businessKey: bk } });
+    const customerEndpoint = process.env.CUSTOMER_SERVER_URL!
+    await axios.post(`${customerEndpoint}/cities`, cities, { headers: { businessKey: bk } });
     console.log(`Posted to customer-server`);
 
     // console.log(`return-cities service: ${cities}`);

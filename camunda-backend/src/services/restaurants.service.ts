@@ -45,7 +45,8 @@ export const AskRestaurantAvailability = async ({ task, taskService }: HandlerAr
 
     await taskService.complete(task, task.variables);
 
-    await axios.get(`http://restaurant-service:5000/api/restaurants/${restaurant}/availability`, {
+    const restuarantServiceEndpoint = process.env.RESTAURANT_SERVER_URL!
+    await axios.get(`${restuarantServiceEndpoint}/api/restaurants/${restaurant}/availability`, {
         params: {
             bk: task.businessKey
         }
@@ -92,7 +93,8 @@ export const UpdateRestaurantInfo = async ({ task, taskService }: HandlerArgs) =
 
 export const SendRestaurantNotUpdated = async ({ task, taskService }: HandlerArgs) => {
     const reastaurantId = task.variables.get('restaurantId');
-    await axios.post(`http://restaurant-service:5000/api/restaurants/${reastaurantId}/updateResponse`, {
+    const restuarantServiceEndpoint = process.env.RESTAURANT_SERVER_URL!
+    await axios.post(`${restuarantServiceEndpoint}/api/restaurants/${reastaurantId}/updateResponse`, {
         message: 'You could not update your restaurant info',
         result: false
     }, {
@@ -107,7 +109,8 @@ export const SendRestaurantNotUpdated = async ({ task, taskService }: HandlerArg
 
 export const SendRestaurantUpdated = async ({ task, taskService }: HandlerArgs) => {
     const reastaurantId = task.variables.get('restaurantId');
-    await axios.post(`http://restaurant-service:5000/api/restaurants/${reastaurantId}/updateResponse`, {
+    const restuarantServiceEndpoint = process.env.RESTAURANT_SERVER_URL!
+    await axios.post(`${restuarantServiceEndpoint}/api/restaurants/${reastaurantId}/updateResponse`, {
         message: 'Restaurant information updated suscessfully',
         result: true
     }, {

@@ -31,7 +31,8 @@ export const verifyToken = async ({ task, taskService }: HandlerArgs) => {
 
 export const SendSuccessfulVerification = async ({ task, taskService }: HandlerArgs) => {
     console.log('send successful verification!')
-    await axios.post("http://customer-server:3001/orders/verifyToken", {
+    const customerEndpoint = process.env.CUSTOMER_SERVER_URL!
+    await axios.post(`${customerEndpoint}/orders/verifyToken`, {
         validated: true
     }, {
         headers: {
@@ -44,7 +45,8 @@ export const SendSuccessfulVerification = async ({ task, taskService }: HandlerA
 }
 
 export const SendUnsuccessfulVerification = async ({ task, taskService }: HandlerArgs) => {
-    await axios.post("http://customer-server:3001/orders/verifyToken", {
+    const customerEndpoint = process.env.CUSTOMER_SERVER_URL!
+    await axios.post(`${customerEndpoint}/orders/verifyToken`, {
         validated: false
     }, {
         headers: {

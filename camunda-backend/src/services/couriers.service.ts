@@ -13,7 +13,8 @@ export const SendCourierRequest = async ({ task, taskService }: HandlerArgs) => 
         console.log(`Sent request to courier ${courierId}`);
 
         await taskService.complete(task, task.variables)
-        await axios.get("http://courier-service:3000/api/v1/availability/" + courierId, {
+        const courierServer = process.env.COURIER_SERVER_URL!
+        await axios.get(`${courierServer}/api/v1/availability/` + courierId, {
             params: {
                 bk: task.businessKey,
                 hour,
