@@ -38,8 +38,10 @@
     let openDialog = false;
 
     let dialogOrderUnavailable = false;
+    let processingOrder = false;
     const handlePayment = async () => {
         localStorage.setItem("price", finalPrice);
+        processingOrder = true;
         try {
             console.log(cart.map((m) => m._id));
             await axios.post(
@@ -57,10 +59,12 @@
                     },
                 }
             );
-
+                
+            processingOrder = false;
             openDialog = true;
             window.open("http://localhost:9090", "_blank").focus();
         } catch (err) {
+            processingOrder = false;
             dialogOrderUnavailable = true;
         }
     };
@@ -96,6 +100,11 @@
 
 <div>
     <h2>Il tuo carrello</h2>
+    <Dialog bind:open={processingOrder} escapeKeyAction="" scrimClickAction="">
+        <Title>Attendi</Title>
+        <Content>Stiamo processando il tuo ordine</Content>
+    </Dialog>
+    
     <Dialog bind:open={openDialog} escapeKeyAction="" scrimClickAction="">
         <Title>Token</Title>
         <Content>
