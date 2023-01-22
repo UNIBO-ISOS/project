@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"os"
 
 	"github.com/gin-gonic/gin"
 )
@@ -39,7 +40,8 @@ func UnlockMessage(messageName, bkey string) (int, error) {
 	}
 
 	body, _ := json.Marshal(msg)
-	res, err := http.Post("http://camunda:8080/engine-rest/message/", "application/json", bytes.NewBuffer(body))
+	camundaUrl := os.Getenv("CAMUNDA_URL")
+	res, err := http.Post(camundaUrl+"/message/", "application/json", bytes.NewBuffer(body))
 
 	return res.StatusCode, err
 }
@@ -56,14 +58,19 @@ func UnlockMessageWithVariables(messageName, bkey string, processVariables Proce
 	fmt.Println(string(obj))
 
 	body, _ := json.Marshal(msg)
-	res, err := http.Post("http://camunda:8080/engine-rest/message/", "application/json", bytes.NewBuffer(body))
+
+	camundaUrl := os.Getenv("CAMUNDA_URL")
+	fmt.Println(camundaUrl)
+	res, err := http.Post(camundaUrl+"/message/", "application/json", bytes.NewBuffer(body))
 
 	return res.StatusCode, err
 }
 
 func StartNewProcess(bkey string) (int, error) {
+	camundaUrl := os.Getenv("CAMUNDA_URL")
+	processName := os.Getenv("PROCESS_NAME")
 	res, err := http.Post(
-		"http://camunda:8080/engine-rest/process-definition/key/Process_0428wxq/start",
+		camundaUrl+"/process-definition/key/"+processName+"/start",
 		"application/json",
 		bytes.NewBuffer([]byte(`{
 			"businessKey": "`+bkey+`"
