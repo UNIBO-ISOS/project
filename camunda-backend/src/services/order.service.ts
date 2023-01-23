@@ -48,7 +48,7 @@ export const NotifyOrderNotAvailable = async ({ task, taskService }: HandlerArgs
     }
     // send-order-created
     const customerEndpoint = process.env.CUSTOMER_SERVER_URL!
-    await axios.post(`${customerEndpoint}:3001/orders/wait`, body, { headers: { businessKey: bk } });
+    await axios.post(`${customerEndpoint}/orders/wait`, body, { headers: { businessKey: bk } });
 
 
     await taskService.complete(task)
