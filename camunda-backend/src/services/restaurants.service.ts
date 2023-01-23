@@ -55,8 +55,24 @@ export const AskRestaurantAvailability = async ({ task, taskService }: HandlerAr
 
 export const VerifyUpdateConditions = async ({ task, taskService }: HandlerArgs) => {
     let pv = variablesFrom(task.variables);
-    pv.set('canUpdate', new Date().getHours() < 16);
+    const todoUpdate = pv.get('update')
+    const updateDate = new Date(todoUpdate.date)
 
+    const now = new Date()
+
+    // Update date must be > today
+    // if not today must be < 10
+    console.log(updateDate)
+    console.log(now)
+    if (updateDate.getDate() > now.getDate() + 1) {
+        pv.set('canUpdate', true);
+        await taskService.complete(task, pv);
+    } else if (updateDate.getDate() <= now.getDate()) {
+        pv.set('canUpdate', false);
+        await taskService.complete(task, pv);
+    }
+
+    pv.set('canUpdate', now.getHours() < 10);
     await taskService.complete(task, pv);
 }
 
