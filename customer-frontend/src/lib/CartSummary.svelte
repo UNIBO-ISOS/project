@@ -62,10 +62,12 @@
                 
             processingOrder = false;
             openDialog = true;
+            dialogOrderUnavailable = false;
             window.open("http://localhost:9090", "_blank").focus();
         } catch (err) {
             processingOrder = false;
             dialogOrderUnavailable = true;
+            openDialog = false;
         }
     };
 
