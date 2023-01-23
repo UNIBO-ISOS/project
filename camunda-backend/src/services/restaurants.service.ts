@@ -59,6 +59,13 @@ export const VerifyUpdateConditions = async ({ task, taskService }: HandlerArgs)
     const updateDate = new Date(todoUpdate.date)
 
     const now = new Date()
+    console.log(todoUpdate)
+    if (todoUpdate.date === undefined) {
+        console.log('no date')
+        pv.set('canUpdate', now.getHours() < 22);
+        await taskService.complete(task, pv);
+        return
+    }
 
     // Update date must be > today
     // if not today must be < 10
