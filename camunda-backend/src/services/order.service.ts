@@ -66,6 +66,7 @@ export const VerifyCancelCondition = async ({ task, taskService }: HandlerArgs) 
     }
 
     const now = [new Date().getHours(), new Date().getMinutes()];
+    now[0] += 1;
     const hours = order.hour.split(":")
     const orderTime = [parseInt(hours[0]), parseInt(hours[1])]
     const nowSeconds = now[0] * 3600 + now[1] * 60;
